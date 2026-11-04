@@ -49,6 +49,7 @@ expect(($survival['player']['thirst'] ?? -1) === 4, 'Drinking must reduce thirst
 expect(($survival['inventory'][0]['quantity'] ?? 0) === 1, 'Drinking must consume exactly one bottle.');
 $survival = GameRules::apply($survival, 'eat_ration')['state'];
 expect(($survival['player']['hunger'] ?? -1) === 3, 'Eating must reduce hunger before the action time advances.');
+$survival = GameRules::apply($survival, 'eat_ration')['state'];
 expectFailure(
     static fn() => GameRules::apply($survival, 'eat_ration'),
     'Eating without a remaining ration must be rejected.'
