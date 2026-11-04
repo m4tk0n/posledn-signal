@@ -117,6 +117,19 @@ function h(string $value): string
                     <strong><?= h($game['room']['name']) ?></strong>
                     <span>Podzemní výzkumný komplex</span>
                 </div>
+                <?php if (!empty($game['state']['flags']['complex_map_unlocked'])): ?>
+                    <div class="map-panel">
+                        <p class="system-label">MAPA KOMPLEXU</p>
+                        <div class="map-track">
+                        <?php foreach ($game['map'] as $node): ?>
+                            <div class="map-node <?= $node['known'] ? 'known' : 'unknown' ?> <?= ($game['state']['room'] ?? '') === $node['id'] ? 'current' : '' ?>">
+                                <span class="map-dot"></span>
+                                <div><strong><?= h($node['name']) ?></strong><small><?= h($node['status']) ?></small></div>
+                            </div>
+                        <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
                 <div class="inventory-panel">
                     <p class="system-label">INVENTÁŘ</p>
                     <?php if (empty($game['state']['inventory'])): ?>
