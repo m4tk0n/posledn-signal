@@ -85,7 +85,7 @@ function h(string $value): string
                 <div class="stat-row"><span>Hlad</span><strong><?= (int) ($game['state']['player']['hunger'] ?? 10) ?> %</strong></div>
                 <div class="stat-row"><span>Žízeň</span><strong><?= (int) ($game['state']['player']['thirst'] ?? 10) ?> %</strong></div>
                 <p class="system-label location-label">AKTUÁLNÍ LOKACE</p>
-                <p>Podzemní komplex<br><strong>Kryokomora</strong></p>
+                <p>Podzemní komplex<br><strong><?= ($game['state']['room'] ?? '') === 'maintenance_corridor' ? 'Servisní chodba' : 'Kryokomora' ?></strong></p>
             </aside>
             <section class="game-panel story-panel">
                 <p class="system-label">ZÁZNAM // PROBUZENÍ</p>
