@@ -28,6 +28,9 @@ $state = GameRules::initialState();
 expect($state['room'] === 'cryo_chamber', 'New game must start in the cryo chamber.');
 expect(count(GameRules::availableActions($state)) === 3, 'Cryo chamber must initially offer three actions.');
 expect(StoryCatalog::room('cryo_chamber')['name'] === 'Kryokomora', 'Cryo room metadata is missing.');
+$initialMap = StoryCatalog::map($state);
+expect(count($initialMap) === 4, 'The initial complex map must contain four locations.');
+expect($initialMap[1]['known'] === false && $initialMap[1]['status'] === 'uzamčeno', 'The corridor must initially be locked.');
 
 expectFailure(
     static fn() => GameRules::apply($state, 'open_door'),
@@ -60,6 +63,10 @@ expect(($state['inventory'][0]['id'] ?? '') === 'scrap_metal', 'Unrelated invent
 $state = GameRules::apply($state, 'inspect_generator')['state'];
 expect(($state['flags']['complex_map_unlocked'] ?? false) === true, 'Generator inspection must unlock the complex map.');
 expect(($state['story_stage'] ?? '') === 'complex_map_unlocked', 'Generator inspection must advance the story.');
+$map = StoryCatalog::map($state);
+expect($map[1]['known'] === true && $map[1]['status'] === 'přístupná', 'The corridor must be discovered after opening the door.');
+expect($map[2]['known'] === true && $map[2]['status'] === 'prozkoumáno', 'The generator must be marked explored after inspection.');
+expect($map[3]['known'] === false, 'The northern sector must remain undiscovered.');
 expectFailure(
     static fn() => GameRules::apply($state, 'install_fuse'),
     'An already installed fuse must not be installable twice.'
