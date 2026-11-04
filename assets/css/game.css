@@ -26,7 +26,7 @@ blockquote{margin:24px 0;padding:18px 22px;border-left:3px solid #79b9a4;backgro
 .story-panel{margin-top:0;min-height:450px}
 .story-panel>p:not(.system-label){font-size:1.05rem;min-height:70px}
 .action-list{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0}
-.journal-panel{border-top:1px solid #314446;margin-top:34px;padding-top:20px}
+.inventory-panel{border-top:1px solid #314446;margin-top:24px;padding-top:18px;color:#b9cbc4}.inventory-panel ul{padding-left:20px;line-height:1.7}.journal-panel{border-top:1px solid #314446;margin-top:34px;padding-top:20px}
 .journal-panel ol{padding-left:22px;color:#b9cbc4;line-height:1.7}
 .journal-panel li{margin:8px 0}
 .error-message{color:#ffb8ae!important}
