@@ -108,7 +108,7 @@ function h(string $value): string
             <span>KAPITOLA <?= (int) $game['chapter'] ?> // <?= h($game['room']['sector']) ?></span>
             <span>ULOŽENÁ HRA // AUTOMATICKY</span>
         </div>
-        <section class="game-layout" id="game-app" data-csrf="<?= h($csrf) ?>">
+        <section class="game-layout" id="game-app" data-csrf="<?= h($csrf) ?>" data-player-x="<?= h((string) ($game['state']['player_position']['x'] ?? 50)) ?>" data-player-y="<?= h((string) ($game['state']['player_position']['y'] ?? 76)) ?>">
             <aside class="status-panel">
                 <div class="identity-block">
                     <p class="system-label">OSOBNÍ ZÁZNAM</p>
@@ -165,7 +165,7 @@ function h(string $value): string
                     </div>
                     <div class="scene-visual <?= $game['room']['visual'] === 'cryo' ? 'cryo-art' : 'corridor-art' ?>" data-scene="<?= h($game['room']['visual']) ?>" aria-label="<?= h($game['room']['name']) ?>">
                         <img class="scene-art" src="assets/images/scenes/<?= $game['room']['visual'] === 'cryo' ? 'cryo-chamber' : 'maintenance-corridor' ?>.svg" alt="<?= h($game['room']['name']) ?> — ilustrované herní prostředí">
-                        <div class="scene-character" id="scene-character" aria-label="Tvoje postava">
+                        <div class="scene-character" id="scene-character" aria-label="Tvoje postava" style="left:<?= h((string) ($game['state']['player_position']['x'] ?? 50)) ?>%;top:<?= h((string) ($game['state']['player_position']['y'] ?? 76)) ?>%">
                             <img src="assets/images/characters/survivor.svg" alt="">
                         </div>
                         <?php foreach ($game['actions'] as $action): ?>
