@@ -361,3 +361,13 @@ footer{display:flex;justify-content:space-between;gap:12px;margin-top:28px;paddi
 @media(prefers-reduced-motion:reduce){
     .scene-character{transition:none}
 }
+
+
+/* Scene collision and proximity feedback */
+.movement-notice{
+    color:#b9e7ce!important;
+    text-shadow:0 0 10px #74c9a455;
+}
+.scene-visual{cursor:crosshair}
+.scene-visual button{cursor:pointer}
+.scene-character{will-change:left,top}
