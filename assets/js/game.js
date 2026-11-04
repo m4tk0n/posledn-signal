@@ -46,14 +46,72 @@
 
     if (!gameApp) return;
     const csrf = gameApp.dataset.csrf;
-
     const character = gameApp.querySelector('#scene-character');
+    const scene = gameApp.querySelector('.scene-visual');
+    const moveButtons = [...gameApp.querySelectorAll('[data-move]')];
+    const positionLabel = gameApp.querySelector('#movement-position');
+    let playerX = 50;
+    let playerY = 76;
+    let interactionBusy = false;
+    let movementTimer = 0;
+
+    function updatePosition() {
+        if (!character) return;
+        character.style.left = playerX + '%';
+        character.style.top = playerY + '%';
+        character.classList.add('is-moving');
+        window.clearTimeout(movementTimer);
+        movementTimer = window.setTimeout(() => character.classList.remove('is-moving'), 220);
+        if (positionLabel) {
+            const horizontal = playerX < 35 ? 'levá část' : (playerX > 65 ? 'pravá část' : 'střed');
+            const vertical = playerY < 48 ? 'zadní část' : (playerY > 70 ? 'přední část' : 'střed místnosti');
+            positionLabel.textContent = 'Pozice: ' + horizontal + ' / ' + vertical;
+        }
+    }
+
+    function movePlayer(dx, dy) {
+        if (!character || interactionBusy) return;
+        const nextX = Math.max(7, Math.min(93, playerX + dx * 3.5));
+        const nextY = Math.max(28, Math.min(89, playerY + dy * 4));
+        if (nextX === playerX && nextY === playerY) return;
+        playerX = nextX;
+        playerY = nextY;
+        updatePosition();
+    }
+
+    moveButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const [dx, dy] = button.dataset.move.split(',').map(Number);
+            movePlayer(dx, dy);
+        });
+    });
+
+    if (scene) {
+        scene.addEventListener('keydown', (event) => {
+            const key = event.key.toLowerCase();
+            const directions = {
+                arrowup: [0, -1], w: [0, -1],
+                arrowdown: [0, 1], s: [0, 1],
+                arrowleft: [-1, 0], a: [-1, 0],
+                arrowright: [1, 0], d: [1, 0]
+            };
+            if (!directions[key]) return;
+            event.preventDefault();
+            movePlayer(...directions[key]);
+        });
+        scene.tabIndex = 0;
+        scene.setAttribute('aria-label', scene.getAttribute('aria-label') + '. Pro pohyb použij W A S D nebo šipky.');
+    }
+
     gameApp.querySelectorAll('[data-command]').forEach((button) => {
         button.addEventListener('click', async () => {
+            if (interactionBusy) return;
             const command = button.dataset.command;
             const matchingButtons = [...gameApp.querySelectorAll('[data-command]')]
                 .filter((item) => item.dataset.command === command);
             const originalTexts = new Map(matchingButtons.map((item) => [item, item.textContent]));
+            interactionBusy = true;
+            moveButtons.forEach((item) => { item.disabled = true; });
             matchingButtons.forEach((item) => {
                 item.disabled = true;
                 item.classList.add('is-busy');
@@ -64,8 +122,10 @@
 
             try {
                 if (character && button.dataset.targetX && button.dataset.targetY) {
-                    character.style.left = button.dataset.targetX + '%';
-                    character.style.top = button.dataset.targetY + '%';
+                    playerX = Number(button.dataset.targetX);
+                    playerY = Number(button.dataset.targetY);
+                    character.style.left = playerX + '%';
+                    character.style.top = playerY + '%';
                     character.classList.add('is-moving');
                     await new Promise((resolve) => window.setTimeout(resolve, 850));
                 }
@@ -78,9 +138,12 @@
                     item.classList.remove('is-busy');
                     item.textContent = originalTexts.get(item);
                 });
+                interactionBusy = false;
+                moveButtons.forEach((item) => { item.disabled = false; });
                 if (character) {
-                    character.style.left = '50%';
-                    character.style.top = '76%';
+                    playerX = 50;
+                    playerY = 76;
+                    updatePosition();
                     character.classList.remove('is-moving');
                 }
             }
