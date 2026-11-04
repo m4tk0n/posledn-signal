@@ -71,6 +71,8 @@ final class GameService
             'inspect_room' => 'Rozhlédneš se po komoře. Na podlaze leží prázdná injekční ampule a vedle dveří bliká nouzové světlo.',
             'read_terminal' => 'Terminál ožije až na třetí pokus. Poslední záznam končí před 73 lety: EVAKUACE ZRUŠENA. SEKTOR SEVER UZAVŘÍT.',
             'listen_radio' => 'Z reproduktoru zapraská hlas. „Pokud mě někdo slyší… nechoďte na sever. Oni stále žijí.“ Signál se okamžitě ztratí.',
+            'open_door' => 'Terminál uvolní elektromagnetický zámek. Těžké dveře se s kovovým skřípěním otevřou do úzké servisní chodby.',
+            'inspect_power_panel' => 'V rozvaděči najdeš jednu nepoškozenou náhradní pojistku. Opatrně ji uložíš do inventáře.',
         ];
         if (!isset($messages[$action])) throw new RuntimeException('Neznámá herní akce.');
         $pdo = Database::connection();
@@ -82,11 +84,30 @@ final class GameService
             if ($raw === false) throw new RuntimeException('Uložená hra nebyla nalezena.');
             $state = json_decode((string) $raw, true, 512, JSON_THROW_ON_ERROR);
             if (!is_array($state)) throw new RuntimeException('Uložený stav hry je poškozený.');
-            $flag = ['inspect_room' => 'room_inspected', 'read_terminal' => 'terminal_read', 'listen_radio' => 'radio_warning_heard'][$action];
+            if ($action === 'open_door' && (empty($state['flags']['room_inspected']) || empty($state['flags']['terminal_read']))) {
+                throw new RuntimeException('Nejdříve prozkoumej komoru a přečti nouzový terminál.');
+            }
+            if ($action === 'inspect_power_panel' && ($state['room'] ?? '') !== 'maintenance_corridor') {
+                throw new RuntimeException('Rozvaděč se v této místnosti nenachází.');
+            }
+            $flag = [
+                'inspect_room' => 'room_inspected',
+                'read_terminal' => 'terminal_read',
+                'listen_radio' => 'radio_warning_heard',
+                'open_door' => 'door_opened',
+                'inspect_power_panel' => 'power_panel_checked',
+            ][$action];
             if (!empty($state['flags'][$flag])) throw new RuntimeException('Tuto část už jsi prozkoumal.');
             $state['flags'][$flag] = true;
             $state['journal'][] = ['type' => $action, 'text' => $messages[$action], 'at' => gmdate('c')];
             if ($action === 'listen_radio') $state['story_stage'] = 'signal_received';
+            if ($action === 'open_door') {
+                $state['room'] = 'maintenance_corridor';
+                $state['story_stage'] = 'entered_corridor';
+            }
+            if ($action === 'inspect_power_panel') {
+                $state['inventory'][] = ['id' => 'spare_fuse', 'name' => 'Náhradní pojistka', 'quantity' => 1];
+            }
             $q = $pdo->prepare('UPDATE ' . Database::table('game_saves') . ' SET game_state = :state, chapter = :chapter WHERE id = :save AND player_id = :player');
             $q->execute(['state' => json_encode($state, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE), 'chapter' => (int) ($state['chapter'] ?? 1), 'save' => $saveId, 'player' => $playerId]);
             self::event($pdo, $saveId, $action, ['message' => $messages[$action]]);
