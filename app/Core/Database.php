@@ -45,7 +45,7 @@ final class Database
         return self::$connection;
     }
 
-    private function __construct()
+    /**\n     * Build a safely quoted table identifier using the mandatory DB_PREFIX.\n     */\n    public static function table(string $name): string\n    {\n        $prefix = Env::get('DB_PREFIX');\n        if ($prefix === null || !preg_match('/^[a-zA-Z][a-zA-Z0-9_]{0,30}_$/', $prefix)) {\n            throw new RuntimeException('Database table prefix is missing or invalid.');\n        }\n        if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]{0,40}$/', $name)) {\n            throw new RuntimeException('Invalid database table name.');\n        }\n\n        return '`' . $prefix . $name . '`';\n    }\n\n    private function __construct()
     {
     }
 }
