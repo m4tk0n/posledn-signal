@@ -22,7 +22,7 @@ final class Database
         $user = Env::get('DB_USER');
         $password = Env::get('DB_PASSWORD');
 
-        if (!$host || !$name || !$user || $password === null) {
+        if (!$host || !$name || !$user || $password === null || $password === '') {
             throw new RuntimeException('Database configuration is incomplete.');
         }
 
