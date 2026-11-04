@@ -70,6 +70,35 @@ final class GameService
         return self::presentGame($playerId, (int) $row['id'], (string) $row['display_name'], (int) $row['chapter'], $state);
     }
 
+
+    public static function savePosition(int $playerId, int $saveId, float $x, float $y): array
+    {
+        $pdo = Database::connection();
+        $pdo->beginTransaction();
+        try {
+            $q = $pdo->prepare('SELECT game_state, chapter FROM ' . Database::table('game_saves') . ' WHERE id = :save AND player_id = :player FOR UPDATE');
+            $q->execute(['save' => $saveId, 'player' => $playerId]);
+            $row = $q->fetch();
+            if (!$row) {
+                throw new RuntimeException('Uložená hra nebyla nalezena.');
+            }
+            $state = json_decode((string) $row['game_state'], true, 512, JSON_THROW_ON_ERROR);
+            if (!is_array($state)) {
+                throw new RuntimeException('Uložený stav hry je poškozený.');
+            }
+            $state['player_position'] = GameRules::validatePosition((string) ($state['room'] ?? 'cryo_chamber'), $x, $y);
+            $q = $pdo->prepare('UPDATE ' . Database::table('game_saves') . ' SET game_state = :state WHERE id = :save AND player_id = :player');
+            $q->execute(['state' => json_encode($state, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE), 'save' => $saveId, 'player' => $playerId]);
+            $pdo->commit();
+            return self::presentGame($playerId, $saveId, '', (int) ($row['chapter'] ?? 1), $state);
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
+        }
+    }
+
     public static function performAction(int $playerId, int $saveId, string $action): array
     {
         $pdo = Database::connection();
@@ -89,6 +118,7 @@ final class GameService
                 throw new RuntimeException('Uložený stav hry je poškozený.');
             }
 
+            GameRules::validateInteractionPosition($state, $action);
             $result = GameRules::apply($state, $action);
             $state = $result['state'];
             $q = $pdo->prepare(
