@@ -28,10 +28,11 @@ if ($actual !== $expected) {
 if (count($statements) !== count($expected)) {
     throw new RuntimeException('Unexpected number of SQL statements: ' . count($statements));
 }
-if (!str_contains($expanded, 'REFERENCES ' . $prefix . 'players')) {
+$quote = chr(96);
+if (!str_contains($expanded, 'REFERENCES ' . $quote . $prefix . 'players' . $quote)) {
     throw new RuntimeException('Game save foreign key does not use the configured prefix.');
 }
-if (!str_contains($expanded, 'REFERENCES ' . $prefix . 'game_saves')) {
+if (!str_contains($expanded, 'REFERENCES ' . $quote . $prefix . 'game_saves' . $quote)) {
     throw new RuntimeException('Game event foreign key does not use the configured prefix.');
 }
 echo "Database schema checks passed (" . count($expected) . " tables).\\n";
