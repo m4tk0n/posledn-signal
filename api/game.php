@@ -50,6 +50,16 @@ try {
         respond(401, ['ok' => false, 'message' => 'Aktivní hra nebyla nalezena.']);
     }
 
+    if ($action === 'save_position') {
+        $x = filter_var($_POST['x'] ?? null, FILTER_VALIDATE_FLOAT);
+        $y = filter_var($_POST['y'] ?? null, FILTER_VALIDATE_FLOAT);
+        if ($x === false || $y === false) {
+            respond(422, ['ok' => false, 'message' => 'Neplatná pozice postavy.']);
+        }
+        $result = GameService::savePosition($playerId, $saveId, (float) $x, (float) $y);
+        respond(200, ['ok' => true, 'game' => $result]);
+    }
+
     if ($action === 'interact') {
         $command = $_POST['command'] ?? '';
         if (!is_string($command)) {
