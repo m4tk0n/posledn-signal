@@ -95,7 +95,17 @@ function h(string $value): string
                     <button class="game-button action-button" data-command="inspect_room" <?= !empty($game['state']['flags']['room_inspected']) ? 'disabled' : '' ?>>Prozkoumat komoru</button>
                     <button class="game-button action-button" data-command="read_terminal" <?= !empty($game['state']['flags']['terminal_read']) ? 'disabled' : '' ?>>Přečíst nouzový terminál</button>
                     <button class="game-button action-button" data-command="listen_radio" <?= !empty($game['state']['flags']['radio_warning_heard']) ? 'disabled' : '' ?>>Poslouchat rádio</button>
+                    <?php if (($game['state']['room'] ?? '') === 'cryo_chamber' && !empty($game['state']['flags']['room_inspected']) && !empty($game['state']['flags']['terminal_read'])): ?>
+                        <button class="game-button action-button" data-command="open_door">Otevřít dveře do chodby</button>
+                    <?php elseif (($game['state']['room'] ?? '') === 'maintenance_corridor'): ?>
+                        <button class="game-button action-button" data-command="inspect_power_panel" <?= !empty($game['state']['flags']['power_panel_checked']) ? 'disabled' : '' ?>>Prozkoumat rozvaděč</button>
+                    <?php endif; ?>
                 </div>
+                <div class="inventory-panel"><p class="system-label">INVENTÁŘ</p><ul id="inventory-list">
+                    <?php foreach (($game['state']['inventory'] ?? []) as $item): ?>
+                        <li><?= h((string) ($item['name'] ?? 'Předmět')) ?> × <?= (int) ($item['quantity'] ?? 1) ?></li>
+                    <?php endforeach; ?>
+                </ul></div>
                 <div class="journal-panel">
                     <p class="system-label">OSOBNÍ DENÍK</p>
                     <ol id="journal-list">
