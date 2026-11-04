@@ -129,6 +129,7 @@ final class GameService
             'state' => $state,
             'room' => StoryCatalog::room($roomId),
             'actions' => GameRules::availableActions($state),
+            'map' => StoryCatalog::map($state),
             'message' => $message,
         ];
     }
