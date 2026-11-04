@@ -46,7 +46,6 @@ final class Env
 
             self::$values[$key] = $value;
             $_ENV[$key] = $value;
-            putenv($key . '=' . $value);
         }
     }
 
