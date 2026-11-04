@@ -175,6 +175,17 @@ function h(string $value): string
                             </button>
                         <?php endforeach; ?>
                     </div>
+
+                    <div class="movement-panel" aria-label="Ovládání pohybu postavy">
+                        <div class="movement-help"><strong>POHYB POSTAVY</strong><span>W A S D / šipky nebo směrová tlačítka</span></div>
+                        <div class="movement-controls">
+                            <button type="button" class="move-button move-up" data-move="0,-1" aria-label="Jít nahoru">▲</button>
+                            <button type="button" class="move-button move-left" data-move="-1,0" aria-label="Jít doleva">◀</button>
+                            <button type="button" class="move-button move-down" data-move="0,1" aria-label="Jít dolů">▼</button>
+                            <button type="button" class="move-button move-right" data-move="1,0" aria-label="Jít doprava">▶</button>
+                        </div>
+                        <span class="movement-position" id="movement-position" aria-live="polite">Pozice: střed místnosti</span>
+                    </div>
                     <div class="scene-footer"><span><i class="status-light"></i> PROSTŘEDÍ ZMAPOVÁNO ČÁSTEČNĚ</span><span><?= h($game['room']['sector']) ?></span></div>
                 </section>
 
