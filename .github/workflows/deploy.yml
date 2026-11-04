@@ -29,6 +29,9 @@ jobs:
       - name: Game rules checks
         run: php tests/game_rules_test.php
 
+      - name: Scene asset checks
+        run: php tests/scene_assets_test.php
+
       - name: Environment configuration checks
         run: php tests/env_test.php
 
