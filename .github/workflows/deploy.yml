@@ -1,7 +1,5 @@
 name: Deploy POSLEDNÍ SIGNÁL to Webzdarma
 
-name: Deploy na FTP
-
 on:
   push:
     branches: [main]
