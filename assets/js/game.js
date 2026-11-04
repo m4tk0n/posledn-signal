@@ -55,6 +55,24 @@
     let interactionBusy = false;
     let movementTimer = 0;
 
+    const sceneObstacles = scene?.dataset.scene === 'cryo'
+        ? [{left: 43, right: 57, top: 29, bottom: 61}]
+        : [{left: 69, right: 77, top: 48, bottom: 69}];
+    const INTERACTION_RANGE = 9;
+
+    function isBlocked(x, y) {
+        return sceneObstacles.some((obstacle) =>
+            x >= obstacle.left && x <= obstacle.right &&
+            y >= obstacle.top && y <= obstacle.bottom
+        );
+    }
+
+    function setNotice(message) {
+        if (!positionLabel) return;
+        positionLabel.textContent = message;
+        positionLabel.classList.add('movement-notice');
+    }
+
     function updatePosition() {
         if (!character) return;
         character.style.left = playerX + '%';
@@ -63,6 +81,7 @@
         window.clearTimeout(movementTimer);
         movementTimer = window.setTimeout(() => character.classList.remove('is-moving'), 220);
         if (positionLabel) {
+            positionLabel.classList.remove('movement-notice');
             const horizontal = playerX < 35 ? 'levá část' : (playerX > 65 ? 'pravá část' : 'střed');
             const vertical = playerY < 48 ? 'zadní část' : (playerY > 70 ? 'přední část' : 'střed místnosti');
             positionLabel.textContent = 'Pozice: ' + horizontal + ' / ' + vertical;
@@ -70,12 +89,31 @@
     }
 
     function movePlayer(dx, dy) {
-        if (!character || interactionBusy) return;
+        if (!character || interactionBusy) return false;
         const nextX = Math.max(7, Math.min(93, playerX + dx * 3.5));
         const nextY = Math.max(28, Math.min(89, playerY + dy * 4));
-        if (nextX === playerX && nextY === playerY) return;
+        if (nextX === playerX && nextY === playerY) return false;
+        if (isBlocked(nextX, nextY)) {
+            setNotice('V cestě je překážka. Zkus jiný směr.');
+            return false;
+        }
         playerX = nextX;
         playerY = nextY;
+        updatePosition();
+        return true;
+    }
+
+    function moveToScenePoint(event) {
+        if (!scene || !character || interactionBusy || event.target.closest('button')) return;
+        const bounds = scene.getBoundingClientRect();
+        const x = Math.max(7, Math.min(93, ((event.clientX - bounds.left) / bounds.width) * 100));
+        const y = Math.max(28, Math.min(89, ((event.clientY - bounds.top) / bounds.height) * 100));
+        if (isBlocked(x, y)) {
+            setNotice('Tudy cesta nevede. V prostoru je překážka.');
+            return;
+        }
+        playerX = x;
+        playerY = y;
         updatePosition();
     }
 
@@ -87,29 +125,61 @@
     });
 
     if (scene) {
-        scene.addEventListener('keydown', (event) => {
-            const key = event.key.toLowerCase();
-            const directions = {
-                arrowup: [0, -1], w: [0, -1],
-                arrowdown: [0, 1], s: [0, 1],
-                arrowleft: [-1, 0], a: [-1, 0],
-                arrowright: [1, 0], d: [1, 0]
-            };
-            if (!directions[key]) return;
-            event.preventDefault();
-            movePlayer(...directions[key]);
-        });
+        scene.addEventListener('click', moveToScenePoint);
         scene.tabIndex = 0;
-        scene.setAttribute('aria-label', scene.getAttribute('aria-label') + '. Pro pohyb použij W A S D nebo šipky.');
+        scene.setAttribute('aria-label', scene.getAttribute('aria-label') + '. Pro pohyb použij W A S D, šipky nebo klepni na volné místo podlahy.');
     }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
+        const active = document.activeElement;
+        if (active && (active.matches('input, textarea, select') || active.isContentEditable)) return;
+        const key = event.key.toLowerCase();
+        const directions = {
+            arrowup: [0, -1], w: [0, -1],
+            arrowdown: [0, 1], s: [0, 1],
+            arrowleft: [-1, 0], a: [-1, 0],
+            arrowright: [1, 0], d: [1, 0]
+        };
+        if (!directions[key]) return;
+        event.preventDefault();
+        movePlayer(...directions[key]);
+    });
 
     gameApp.querySelectorAll('[data-command]').forEach((button) => {
         button.addEventListener('click', async () => {
             if (interactionBusy) return;
             const command = button.dataset.command;
+            const targetX = Number(button.dataset.targetX);
+            const targetY = Number(button.dataset.targetY);
+            const hasTarget = Number.isFinite(targetX) && Number.isFinite(targetY);
             const matchingButtons = [...gameApp.querySelectorAll('[data-command]')]
                 .filter((item) => item.dataset.command === command);
             const originalTexts = new Map(matchingButtons.map((item) => [item, item.textContent]));
+
+            if (hasTarget && Math.hypot(targetX - playerX, targetY - playerY) > INTERACTION_RANGE) {
+                if (isBlocked(targetX, targetY)) {
+                    setNotice('K tomuto objektu se z této strany nedostaneš.');
+                    return;
+                }
+                interactionBusy = true;
+                moveButtons.forEach((item) => { item.disabled = true; });
+                matchingButtons.forEach((item) => { item.disabled = true; });
+                playerX = targetX;
+                playerY = targetY;
+                character.style.left = playerX + '%';
+                character.style.top = playerY + '%';
+                character.classList.add('is-moving');
+                setNotice('Přistupuješ k objektu…');
+                await new Promise((resolve) => window.setTimeout(resolve, 850));
+                character.classList.remove('is-moving');
+                interactionBusy = false;
+                moveButtons.forEach((item) => { item.disabled = false; });
+                matchingButtons.forEach((item) => { item.disabled = false; });
+                setNotice('Jsi u objektu. Znovu vyber stejnou akci.');
+                return;
+            }
+
             interactionBusy = true;
             moveButtons.forEach((item) => { item.disabled = true; });
             matchingButtons.forEach((item) => {
@@ -121,14 +191,6 @@
             });
 
             try {
-                if (character && button.dataset.targetX && button.dataset.targetY) {
-                    playerX = Number(button.dataset.targetX);
-                    playerY = Number(button.dataset.targetY);
-                    character.style.left = playerX + '%';
-                    character.style.top = playerY + '%';
-                    character.classList.add('is-moving');
-                    await new Promise((resolve) => window.setTimeout(resolve, 850));
-                }
                 await send({action: 'interact', command, _csrf: csrf});
                 window.location.reload();
             } catch (error) {
@@ -140,12 +202,7 @@
                 });
                 interactionBusy = false;
                 moveButtons.forEach((item) => { item.disabled = false; });
-                if (character) {
-                    playerX = 50;
-                    playerY = 76;
-                    updatePosition();
-                    character.classList.remove('is-moving');
-                }
+                updatePosition();
             }
         });
     });
