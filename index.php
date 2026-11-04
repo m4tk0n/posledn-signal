@@ -166,8 +166,15 @@ function h(string $value): string
                     <?php if (!empty($game['message'])): ?>
                         <div class="latest-message"><span>POSLEDNÍ UDÁLOST</span><p><?= h($game['message']) ?></p></div>
                     <?php endif; ?>
+                    <?php if ((int) ($game['state']['player']['health'] ?? 100) <= 0): ?>
+                        <div class="latest-message game-over-message">
+                            <span>STAV // KONEC HRY</span>
+                            <h3>Životní funkce zastaveny</h3>
+                            <p>Postava zemřela. Tento průchod skončil. Uložený záznam zůstává zachován.</p>
+                        </div>
+                    <?php endif; ?>
                     <div class="action-section">
-                        <p class="system-label">DOSTUPNÉ AKCE</p>
+                        <p class="system-label"><?= (int) ($game['state']['player']['health'] ?? 100) <= 0 ? 'KONEC HRY' : 'DOSTUPNÉ AKCE' ?></p>
                         <div class="action-list">
                             <?php foreach ($game['actions'] as $action): ?>
                                 <button class="game-button action-button" data-command="<?= h($action['id']) ?>"><?= h($action['label']) ?><span>→</span></button>
