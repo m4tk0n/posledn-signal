@@ -37,6 +37,12 @@ jobs:
             **/.git*
             **/.git*/**
             **/.github/**
+            **/.env
+            **/.env.local
+            **/.env.production
+            **/.env.*.local
             **/node_modules/**
+            **/vendor/**
             **/__pycache__/**
             **/*.pyc
+            **/*.log
