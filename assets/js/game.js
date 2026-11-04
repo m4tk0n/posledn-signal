@@ -50,8 +50,10 @@
     const scene = gameApp.querySelector('.scene-visual');
     const moveButtons = [...gameApp.querySelectorAll('[data-move]')];
     const positionLabel = gameApp.querySelector('#movement-position');
-    let playerX = 50;
-    let playerY = 76;
+    let playerX = Number(gameApp.dataset.playerX || 50);
+    let playerY = Number(gameApp.dataset.playerY || 76);
+    let savePositionTimer = 0;
+    let positionSaveChain = Promise.resolve();
     let interactionBusy = false;
     let movementTimer = 0;
 
@@ -59,6 +61,15 @@
         ? [{left: 43, right: 57, top: 29, bottom: 61}]
         : [{left: 69, right: 77, top: 48, bottom: 69}];
     const INTERACTION_RANGE = 9;
+
+    function persistPosition() {
+        window.clearTimeout(savePositionTimer);
+        savePositionTimer = window.setTimeout(() => {
+            positionSaveChain = positionSaveChain
+                .then(() => send({action: 'save_position', x: playerX, y: playerY, _csrf: csrf}))
+                .catch((error) => setNotice(error.message));
+        }, 350);
+    }
 
     function isBlocked(x, y) {
         return sceneObstacles.some((obstacle) =>
@@ -100,6 +111,7 @@
         playerX = nextX;
         playerY = nextY;
         updatePosition();
+        persistPosition();
         return true;
     }
 
@@ -115,6 +127,7 @@
         playerX = x;
         playerY = y;
         updatePosition();
+        persistPosition();
     }
 
     moveButtons.forEach((button) => {
@@ -146,6 +159,8 @@
         movePlayer(...directions[key]);
     });
 
+    updatePosition();
+
     gameApp.querySelectorAll('[data-command]').forEach((button) => {
         button.addEventListener('click', async () => {
             if (interactionBusy) return;
@@ -173,6 +188,15 @@
                 setNotice('Přistupuješ k objektu…');
                 await new Promise((resolve) => window.setTimeout(resolve, 850));
                 character.classList.remove('is-moving');
+                try {
+                    await send({action: 'save_position', x: playerX, y: playerY, _csrf: csrf});
+                } catch (error) {
+                    interactionBusy = false;
+                    moveButtons.forEach((item) => { item.disabled = false; });
+                    matchingButtons.forEach((item) => { item.disabled = false; });
+                    setNotice(error.message);
+                    return;
+                }
                 interactionBusy = false;
                 moveButtons.forEach((item) => { item.disabled = false; });
                 matchingButtons.forEach((item) => { item.disabled = false; });
@@ -191,6 +215,9 @@
             });
 
             try {
+                window.clearTimeout(savePositionTimer);
+                await positionSaveChain;
+                await send({action: 'save_position', x: playerX, y: playerY, _csrf: csrf});
                 await send({action: 'interact', command, _csrf: csrf});
                 window.location.reload();
             } catch (error) {
