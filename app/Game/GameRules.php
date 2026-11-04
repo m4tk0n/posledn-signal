@@ -75,12 +75,49 @@ final class GameRules
             'chapter' => 1,
             'location' => 'underground_complex',
             'room' => 'cryo_chamber',
+            'player_position' => ['x' => 50.0, 'y' => 76.0],
             'player' => ['health' => 100, 'energy' => 70, 'hunger' => 10, 'thirst' => 10],
             'inventory' => [],
             'flags' => [],
             'journal' => [],
             'story_stage' => 'awakening',
         ];
+    }
+
+
+    public static function validatePosition(string $room, float $x, float $y): array
+    {
+        if (!is_finite($x) || !is_finite($y) || $x < 7 || $x > 93 || $y < 28 || $y > 89) {
+            throw new RuntimeException('Neplatná pozice postavy.');
+        }
+        $obstacles = $room === 'cryo_chamber'
+            ? [['left' => 43, 'right' => 57, 'top' => 29, 'bottom' => 61]]
+            : [['left' => 69, 'right' => 77, 'top' => 48, 'bottom' => 69]];
+        foreach ($obstacles as $obstacle) {
+            if ($x >= $obstacle['left'] && $x <= $obstacle['right'] && $y >= $obstacle['top'] && $y <= $obstacle['bottom']) {
+                throw new RuntimeException('Na tomto místě je překážka.');
+            }
+        }
+        return ['x' => round($x, 2), 'y' => round($y, 2)];
+    }
+
+    public static function validateInteractionPosition(array $state, string $action): void
+    {
+        $targets = [
+            'inspect_room' => [19, 67], 'search_emergency_kit' => [51, 70],
+            'read_terminal' => [77, 62], 'listen_radio' => [35, 34],
+            'open_door' => [88, 47], 'drink_water' => [47, 82],
+            'eat_ration' => [56, 82], 'inspect_power_panel' => [82, 63],
+            'install_fuse' => [82, 63], 'inspect_generator' => [55, 43],
+        ];
+        if (!isset($targets[$action])) {
+            throw new RuntimeException('Neznámá herní akce.');
+        }
+        $position = $state['player_position'] ?? ['x' => 50, 'y' => 76];
+        $position = self::validatePosition((string) ($state['room'] ?? 'cryo_chamber'), (float) ($position['x'] ?? 50), (float) ($position['y'] ?? 76));
+        if (hypot($targets[$action][0] - $position['x'], $targets[$action][1] - $position['y']) > 9) {
+            throw new RuntimeException('Nejdříve musíš dojít blíž k objektu.');
+        }
     }
 
     public static function availableActions(array $state): array
@@ -156,6 +193,7 @@ final class GameRules
             self::addItem($state, 'scrap_metal', 'Kovové součástky', 2);
         } elseif ($action === 'open_door') {
             $state['room'] = 'maintenance_corridor';
+            $state['player_position'] = ['x' => 50.0, 'y' => 76.0];
             $state['story_stage'] = 'entered_corridor';
         } elseif ($action === 'inspect_power_panel') {
             self::addItem($state, 'spare_fuse', 'Náhradní pojistka', 1);
