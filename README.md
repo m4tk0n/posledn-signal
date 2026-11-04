@@ -62,9 +62,10 @@ PHP 5.3 používat nebudeme. Webzdarma uvádí podporu PHP 7.4 až 8.4 a MySQL 8
 ### Nastavení serveru
 
 1. Na serveru vytvořit soubor `.env` podle `.env.example`.
-2. Doplnit skutečné údaje databáze a unikátní hodnotu `APP_KEY`.
-3. Soubor `.env` ponechat na serveru; automatické nasazení jej záměrně vynechává.
-4. Zkontrolovat, že hosting používá PHP 8.4 a má zapnuté rozšíření PDO MySQL.
+2. Doplnit skutečné údaje databáze, povinný `DB_PREFIX` (např. `posledni_signal_`) a unikátní `APP_KEY` o délce alespoň 32 znaků.
+3. Otevřít `/install/install.php` a zadat instalační klíč shodný s `APP_KEY`.
+4. Po úspěšné instalaci ponechat `.env` na serveru; automatické nasazení jej záměrně vynechává.
+5. Zkontrolovat, že hosting používá PHP 8.4 a má zapnuté rozšíření PDO MySQL.
 
 **Nikdy neposílat obsah produkčního `.env` do chatu ani do GitHubu.**
 
@@ -77,6 +78,9 @@ PHP 5.3 používat nebudeme. Webzdarma uvádí podporu PHP 7.4 až 8.4 a MySQL 8
 ├── .gitignore
 ├── .htaccess
 ├── index.php
+├── install/
+│   ├── install.php
+│   └── schema.sql
 ├── app/
 │   ├── bootstrap.php
 │   ├── Core/
