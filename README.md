@@ -127,7 +127,7 @@ Složky pro další moduly budou doplňovány postupně podle skutečné impleme
 - Zachovávat přehlednou strukturu, komentáře a diagnostiku.
 - Po každé etapě připravit testovací verzi; uživatel ověřuje chování hry, vývoj a opravy zajišťuje implementace.
 
-## První vývojová etapa
+## První hratelný úsek\n\nPo instalaci databáze může hráč založit novou hru. Stav postavy se ukládá na serveru do JSON sloupce uložené hry; každá důležitá akce se zapisuje také do tabulky herních událostí. Úvodní místnost nabízí tři jednorázové interakce: prozkoumání kryokomory, přečtení nouzového terminálu a poslech rádia. Opakování již provedené akce server odmítne.\n\n## První vývojová etapa
 
 1. Základ projektu, konfigurace a bezpečnostní vrstva.
 2. Datový model hráče, herního světa a ukládání postupu.
@@ -137,4 +137,4 @@ Složky pro další moduly budou doplňovány postupně podle skutečné impleme
 
 ---
 
-**Stav projektu:** základní aplikační kostra založena; herní systémy a první hratelný úsek jsou další etapou.
+**Stav projektu:** technický základ, instalátor databáze a první hratelný úsek jsou implementovány. Hráč může založit uloženou hru, prozkoumat kryokomoru, přečíst nouzový terminál a zachytit rádiové varování. Další etapou je rozšíření světa, inventáře, přežití a navazujícího příběhu.
