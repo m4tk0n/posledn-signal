@@ -23,7 +23,8 @@ final class GameService
     public static function createNewGame(string $name): array
     {
         $name = trim($name);
-        if ($name === '' || preg_match_all('/./us', $name) === false || preg_match_all('/./us', $name) > 40) {
+        $nameLength = preg_match_all('/./us', $name);
+        if ($name === '' || $nameLength === false || $nameLength > 40) {
             throw new RuntimeException('Jméno postavy musí mít 1 až 40 znaků.');
         }
         $pdo = Database::connection();
