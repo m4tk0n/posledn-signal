@@ -27,9 +27,15 @@ final class StoryCatalog
         return self::ROOMS[$id] ?? self::ROOMS['cryo_chamber'];
     }
 
-    public static function chapterTitle(int $chapter): string
+    public static function map(array $state): array
     {
-        return [1 => 'Probuzení'][max(1, $chapter)] ?? 'Neznámý sektor';
+        $flags = $state['flags'] ?? [];
+        return [
+            ['id' => 'cryo_chamber', 'name' => 'Kryokomora', 'status' => 'prozkoumáno', 'known' => true],
+            ['id' => 'maintenance_corridor', 'name' => 'Servisní chodba', 'status' => !empty($flags['door_opened']) ? 'přístupná' : 'uzamčeno', 'known' => !empty($flags['door_opened'])],
+            ['id' => 'generator', 'name' => 'Nouzový generátor', 'status' => !empty($flags['generator_inspected']) ? 'prozkoumáno' : (!empty($flags['fuse_installed']) ? 'přístupný' : 'bez napájení'), 'known' => !empty($flags['fuse_installed'])],
+            ['id' => 'north_sector', 'name' => 'Severní sektor', 'status' => 'neznámá oblast', 'known' => false],
+        ];
     }
 
     private function __construct() {}
