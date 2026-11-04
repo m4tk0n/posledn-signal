@@ -1,10 +1,14 @@
 <?php
 declare(strict_types=1);
 
+use App\Game\GameRules;
 use App\Game\GameService;
+use App\Game\StoryCatalog;
 use App\Security\Session;
 
 require_once dirname(__DIR__) . '/app/bootstrap.php';
+require_once BASE_PATH . '/app/Game/GameRules.php';
+require_once BASE_PATH . '/app/Game/StoryCatalog.php';
 require_once BASE_PATH . '/app/Game/GameService.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -34,6 +38,7 @@ try {
             respond(409, ['ok' => false, 'message' => 'Databáze není nainstalována. Nejprve spusť instalátor.']);
         }
         $result = GameService::createNewGame(is_string($_POST['name'] ?? null) ? $_POST['name'] : 'Přeživší');
+        session_regenerate_id(true);
         $_SESSION['player_id'] = $result['player_id'];
         $_SESSION['active_save_id'] = $result['save_id'];
         respond(200, ['ok' => true, 'game' => $result]);
