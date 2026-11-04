@@ -21,6 +21,9 @@ jobs:
       - name: Database schema checks
         run: php tests/schema_test.php
 
+      - name: Game rules checks
+        run: php tests/game_rules_test.php
+
       - name: FTP deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
