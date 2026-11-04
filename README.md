@@ -129,7 +129,7 @@ Složky pro další moduly budou doplňovány postupně podle skutečné impleme
 
 ## Grafické zpracování
 
-Herní lokace se vykreslují jako samostatné škálovatelné SVG ilustrace uložené v `assets/images/scenes/`. Aktuálně jsou připravené dvě odlišné scény: kryokomora a servisní chodba. Rozhraní používá stejný systém pro úvodní obrazovku i samotnou hru; nové lokace dostanou vlastní ilustrace bez zásahu do herních pravidel. Kontrola existence a napojení scén probíhá v `tests/scene_assets_test.php`.
+Herní lokace se vykreslují jako samostatné škálovatelné SVG ilustrace uložené v `assets/images/scenes/`. Aktuálně jsou připravené dvě odlišné scény: kryokomora a servisní chodba. Přímo ve scéně je vykreslená postava přeživšího (`assets/images/characters/survivor.svg`) a interaktivní body zájmu. Kliknutí na bod přesune postavu k objektu s krátkou animací a následně provede ověřenou serverovou herní akci. Stejné cíle pohybu používají i textové akce pod scénou. Kontrola grafických podkladů, hotspotů a pohybu probíhá v `tests/scene_assets_test.php`.
 
 ## První hratelný úsek\n\nPo instalaci databáze může hráč založit novou hru. Stav postavy se ukládá na serveru do JSON sloupce uložené hry; každá důležitá akce se zapisuje také do tabulky herních událostí. Úvodní místnost nabízí jednorázové interakce: prozkoumání kryokomory, nalezení nouzového balíčku, přečtení terminálu a poslech rádia. Balíček obsahuje dvě lahve vody a dvě potravinové dávky. Hráč může jídlo a vodu spotřebovat; jejich počet se odečítá z inventáře. Po každé úspěšné akci roste hlad a žízeň a klesá energie. Kritická žízeň nebo hlad poškozují zdraví. Při nulovém zdraví hra skončí a server další akce odmítne. Opakování jednorázových akcí server odmítne.\n\n## První vývojová etapa
 
