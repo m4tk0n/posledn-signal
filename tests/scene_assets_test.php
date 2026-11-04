@@ -43,7 +43,7 @@ if (!str_contains($index, 'class="scene-character"')
 $script = file_get_contents($root . '/assets/js/game.js');
 $styles = file_get_contents($root . '/assets/css/game.css');
 if (!is_string($script) || !str_contains($script, 'scene-character') || !str_contains($script, 'button.dataset.targetX')
-    || !is_string($styles) || !str_contains($styles, '.scene-hotspot') || !str_contains($styles, '.survivor-walk')) {
+    || !is_string($styles) || !str_contains($styles, '.scene-hotspot') || !str_contains($styles, 'animation:survivor-walk')) {
     throw new RuntimeException('Scene movement or interaction styling is missing.');
 }
 
