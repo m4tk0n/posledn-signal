@@ -85,6 +85,9 @@ final class GameRules
 
     public static function availableActions(array $state): array
     {
+        if ((int) ($state['player']['health'] ?? 100) <= 0) {
+            return [];
+        }
         $available = [];
         foreach (self::ACTIONS as $id => $definition) {
             if (($definition['room'] !== '*' && ($state['room'] ?? '') !== $definition['room']) || (empty($definition['repeatable']) && !empty($state['flags'][$definition['flag']]))) {
@@ -109,6 +112,9 @@ final class GameRules
 
     public static function apply(array $state, string $action): array
     {
+        if ((int) ($state['player']['health'] ?? 100) <= 0) {
+            throw new RuntimeException('Postava zemřela. V tomto průchodu už nelze pokračovat.');
+        }
         if (!isset(self::ACTIONS[$action])) {
             throw new RuntimeException('Neznámá herní akce.');
         }
