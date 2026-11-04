@@ -36,14 +36,16 @@ if (!is_string($character) || !str_contains($character, '<svg ') || !str_contain
 if (!str_contains($index, 'class="scene-character"')
     || !str_contains($index, 'class="scene-hotspot"')
     || !str_contains($index, 'data-target-x')
-    || !str_contains($index, 'data-target-y')) {
+    || !str_contains($index, 'data-target-y')
+    || !str_contains($index, 'data-move')
+    || !str_contains($index, 'movement-controls')) {
     throw new RuntimeException('The game view is missing the player sprite or interactive scene hotspots.');
 }
 
 $script = file_get_contents($root . '/assets/js/game.js');
 $styles = file_get_contents($root . '/assets/css/game.css');
-if (!is_string($script) || !str_contains($script, 'scene-character') || !str_contains($script, 'button.dataset.targetX')
-    || !is_string($styles) || !str_contains($styles, '.scene-hotspot') || !str_contains($styles, 'animation:survivor-walk')) {
+if (!is_string($script) || !str_contains($script, 'scene-character') || !str_contains($script, 'button.dataset.targetX') || !str_contains($script, 'function movePlayer') || !str_contains($script, 'arrowup')
+    || !is_string($styles) || !str_contains($styles, '.scene-hotspot') || !str_contains($styles, 'animation:survivor-walk') || !str_contains($styles, '.movement-controls')) {
     throw new RuntimeException('Scene movement or interaction styling is missing.');
 }
 
