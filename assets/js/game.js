@@ -3,14 +3,20 @@
     const gameApp = document.getElementById('game-app');
 
     async function send(data) {
-        const body = new URLSearchParams(data);
         const response = await fetch('api/game.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
-            body,
-            credentials: 'same-origin'
+            body: new URLSearchParams(data),
+            credentials: 'same-origin',
+            cache: 'no-store'
         });
-        const result = await response.json();
+
+        let result;
+        try {
+            result = await response.json();
+        } catch {
+            throw new Error('Server vrátil neplatnou odpověď.');
+        }
         if (!response.ok || !result.ok) {
             throw new Error(result.message || 'Požadavek se nepodařilo dokončit.');
         }
@@ -20,7 +26,7 @@
     if (startForm) {
         startForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            const button = startForm.querySelector('button');
+            const button = startForm.querySelector('button[type="submit"]');
             button.disabled = true;
             button.textContent = 'Navazuji spojení…';
             try {
@@ -31,7 +37,7 @@
                 });
                 window.location.reload();
             } catch (error) {
-                alert(error.message);
+                window.alert(error.message);
                 button.disabled = false;
                 button.textContent = 'Začít příběh';
             }
@@ -40,19 +46,19 @@
 
     if (!gameApp) return;
     const csrf = gameApp.dataset.csrf;
-    const message = document.getElementById('story-message');
-    const journal = document.getElementById('journal-list');
 
     gameApp.querySelectorAll('[data-command]').forEach((button) => {
         button.addEventListener('click', async () => {
-            const command = button.dataset.command;
             button.disabled = true;
+            const originalText = button.textContent;
+            button.textContent = 'Probíhá…';
             try {
-                const result = await send({action: 'interact', command, _csrf: csrf});
+                await send({action: 'interact', command: button.dataset.command, _csrf: csrf});
                 window.location.reload();
             } catch (error) {
-                alert(error.message);
+                window.alert(error.message);
                 button.disabled = false;
+                button.textContent = originalText;
             }
         });
     });
