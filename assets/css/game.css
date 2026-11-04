@@ -189,3 +189,123 @@ footer{display:flex;justify-content:space-between;gap:12px;margin-top:28px;paddi
 @media(prefers-reduced-motion:reduce){
     .scene-art{animation:none}
 }
+
+
+/* Playable 2D scene layer: survivor sprite and world interaction points */
+.scene-visual{
+    min-height:300px;
+    touch-action:pan-y;
+}
+.scene-character{
+    position:absolute;
+    z-index:4;
+    left:50%;
+    top:76%;
+    width:clamp(48px,7.5%,94px);
+    height:43%;
+    max-height:190px;
+    transform:translate(-50%,-78%);
+    pointer-events:none;
+    transition:left .82s cubic-bezier(.2,.75,.25,1),top .82s cubic-bezier(.2,.75,.25,1);
+    filter:drop-shadow(0 5px 12px #000c) drop-shadow(0 0 9px #8be2ca44);
+}
+.scene-character img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center bottom;
+    animation:survivor-idle 3.8s ease-in-out infinite;
+}
+.scene-character.is-moving img{
+    animation:survivor-walk .34s ease-in-out infinite alternate;
+}
+.scene-hotspot{
+    position:absolute;
+    z-index:5;
+    left:var(--hotspot-x);
+    top:var(--hotspot-y);
+    width:42px;
+    height:42px;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    background:transparent;
+    color:#e1fff3;
+    transform:translate(-50%,-50%);
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    -webkit-tap-highlight-color:transparent;
+}
+.hotspot-ring{
+    position:absolute;
+    inset:7px;
+    border:2px solid #b8f4db;
+    border-radius:50%;
+    background:#6ac7a333;
+    box-shadow:0 0 0 4px #9ce9d522,0 0 18px #80e4c6aa;
+    animation:hotspot-pulse 2.2s ease-out infinite;
+    transition:transform .18s ease,background .18s ease;
+}
+.hotspot-label{
+    position:absolute;
+    left:50%;
+    bottom:calc(100% + 8px);
+    width:max-content;
+    max-width:150px;
+    padding:5px 8px;
+    border:1px solid #67998a99;
+    border-radius:3px;
+    background:#071318eF;
+    color:#d7f4e7;
+    font-size:.62rem;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    text-align:center;
+    opacity:.88;
+    transform:translateX(-50%);
+    pointer-events:none;
+    box-shadow:0 4px 14px #0008;
+}
+.scene-hotspot:hover .hotspot-ring,
+.scene-hotspot:focus-visible .hotspot-ring{
+    transform:scale(1.28);
+    background:#8ce4c866;
+}
+.scene-hotspot:focus-visible{
+    outline:2px solid #d4ffeb;
+    outline-offset:5px;
+}
+.scene-hotspot:disabled{
+    cursor:wait;
+    opacity:.55;
+}
+.scene-hotspot.is-busy .hotspot-ring{
+    animation:none;
+    transform:scale(1.45);
+    background:#c0f8df88;
+}
+@keyframes hotspot-pulse{
+    0%{box-shadow:0 0 0 0 #9ce9d566,0 0 15px #80e4c677}
+    70%{box-shadow:0 0 0 12px #9ce9d500,0 0 22px #80e4c699}
+    100%{box-shadow:0 0 0 0 #9ce9d500,0 0 15px #80e4c677}
+}
+@keyframes survivor-idle{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-3px)}
+}
+@keyframes survivor-walk{
+    from{transform:translateY(0) rotate(-2deg)}
+    to{transform:translateY(-5px) rotate(2deg)}
+}
+@media(max-width:650px){
+    .scene-visual{min-height:260px}
+    .scene-character{width:12%;height:42%;max-height:150px}
+    .scene-hotspot{width:38px;height:38px}
+    .hotspot-label{font-size:.55rem;max-width:112px;padding:4px 6px}
+}
+@media(prefers-reduced-motion:reduce){
+    .scene-character,.scene-character img,.hotspot-ring{transition:none;animation:none}
+}
