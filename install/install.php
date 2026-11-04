@@ -72,7 +72,7 @@ try {
         $statements = preg_split('/;\s*(?:\r?\n|$)/', trim($schema));
         foreach ($statements ?: [] as $statement) {
             $statement = trim($statement);
-            if ($statement !== '' && !str_starts_with($statement, '--')) {
+            if ($statement !== '') {
                 $pdo->exec($statement);
             }
         }
