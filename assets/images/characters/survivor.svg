@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 340" role="img" aria-labelledby="t d">
+<title id="t">Postava přeživšího</title><desc id="d">Osamělá postava v tmavém průzkumném obleku s kapucí a slabě svítícím přístrojovým panelem.</desc>
+<defs>
+ <linearGradient id="suit" x2="1" y2="0"><stop stop-color="#111b20"/><stop offset=".48" stop-color="#34474a"/><stop offset="1" stop-color="#0b1419"/></linearGradient>
+ <linearGradient id="visor" x2="0" y2="1"><stop stop-color="#a2e4d7" stop-opacity=".85"/><stop offset=".45" stop-color="#315b60"/><stop offset="1" stop-color="#101e26"/></linearGradient>
+ <filter id="g"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>
+<ellipse cx="90" cy="324" rx="48" ry="10" fill="#000" opacity=".7"/>
+<path d="M55 78Q46 45 68 27Q91 7 116 30Q138 50 124 83L133 112 47 112Z" fill="#0b141a" stroke="#77938d" stroke-width="3"/>
+<path d="M63 53Q90 24 119 54L113 77Q90 91 67 76Z" fill="url(#visor)" stroke="#a2d9ca" stroke-opacity=".7" stroke-width="2"/>
+<path d="M69 58Q90 46 113 58" fill="none" stroke="#d3fff0" stroke-opacity=".75" stroke-width="3"/>
+<path d="M52 103Q90 88 128 104L147 212 132 258 48 258 32 210Z" fill="url(#suit)" stroke="#78948d" stroke-width="3"/>
+<path d="M56 113L32 142 18 214Q17 228 31 230L45 221 62 160M124 113L148 142 163 214Q164 228 150 230L136 221 119 160" fill="url(#suit)" stroke="#78948d" stroke-width="5" stroke-linejoin="round"/>
+<path d="M71 108V245M109 108V245" stroke="#91b8aa" stroke-opacity=".28" stroke-width="3"/>
+<path d="M70 140H110V188H70Z" fill="#101f24" stroke="#789c91" stroke-width="3"/>
+<rect x="77" y="148" width="26" height="8" rx="2" fill="#80d8bd"/><rect x="77" y="148" width="26" height="8" rx="2" fill="#80d8bd" filter="url(#g)"/>
+<path d="M77 166H103M77 175H96" stroke="#83c8b5" stroke-width="3" opacity=".65"/>
+<path d="M57 252L48 293 50 320Q69 332 84 320L89 266M123 252L132 293 130 320Q111 332 96 320L91 266" fill="#17252a" stroke="#77928a" stroke-width="4"/>
+<path d="M46 308L44 328Q62 338 88 329L88 316M94 316L92 329Q118 338 136 328L134 308" fill="#0b1318" stroke="#68857e" stroke-width="3"/>
+<path d="M36 216L47 224M144 216L133 224" stroke="#d1a16d" stroke-width="5" opacity=".8"/>
+</svg>
