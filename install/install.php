@@ -90,7 +90,7 @@ try {
     }
 } catch (Throwable $exception) {
     error_log('Installer: ' . $exception->getMessage());
-    $error = $exception->getMessage();
+    $error = 'Instalaci se nepodařilo dokončit. Zkontrolujte konfiguraci .env, oprávnění složky storage a databázové připojení. Podrobnosti jsou pouze v serverovém error logu.';
     if (http_response_code() < 400) {
         http_response_code(500);
     }
