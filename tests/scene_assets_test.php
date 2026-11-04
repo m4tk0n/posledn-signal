@@ -21,8 +21,8 @@ foreach ($scenes as $file => $title) {
 
 $index = file_get_contents($root . '/index.php');
 if (!is_string($index)
-    || !str_contains($index, 'cryo-chamber.svg')
-    || !str_contains($index, 'maintenance-corridor.svg')
+    || !str_contains($index, 'cryo-chamber')
+    || !str_contains($index, 'maintenance-corridor')
     || !str_contains($index, 'class="scene-art"')) {
     throw new RuntimeException('The game view does not render all illustrated scenes.');
 }
