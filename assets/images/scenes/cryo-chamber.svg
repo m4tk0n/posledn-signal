@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Kryokomora výzkumného komplexu</title><desc id="desc">Temná futuristická místnost s řadou vysokých kryogenních modulů, nouzovým osvětlením a centrální otevřenou komorou.</desc>
+<defs>
+ <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#1b333b"/><stop offset=".55" stop-color="#10242b"/><stop offset="1" stop-color="#091318"/></linearGradient>
+ <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#172b30"/><stop offset="1" stop-color="#050a0e"/></linearGradient>
+ <linearGradient id="glass" x2="1" y2=".2"><stop stop-color="#0b222b"/><stop offset=".24" stop-color="#4e9698" stop-opacity=".32"/><stop offset=".48" stop-color="#c2f4e8" stop-opacity=".12"/><stop offset=".76" stop-color="#398b91" stop-opacity=".25"/><stop offset="1" stop-color="#07151b"/></linearGradient>
+ <linearGradient id="podCore" x2="0" y2="1"><stop stop-color="#9ce9dd" stop-opacity=".12"/><stop offset=".4" stop-color="#71c9c1" stop-opacity=".04"/><stop offset="1" stop-color="#06141b" stop-opacity=".8"/></linearGradient>
+ <linearGradient id="metal" x2="1" y2="0"><stop stop-color="#15272d"/><stop offset=".5" stop-color="#526d70"/><stop offset="1" stop-color="#111d23"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#6be2d0" stop-opacity=".32"/><stop offset="1" stop-color="#6be2d0" stop-opacity="0"/></radialGradient>
+ <filter id="blur"><feGaussianBlur stdDeviation="24"/></filter>
+ <filter id="shadow"><feGaussianBlur stdDeviation="18"/></filter>
+ <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M64 0H0V64" fill="none" stroke="#9adbd1" stroke-opacity=".08" stroke-width="1"/></pattern>
+ <g id="pod">
+  <ellipse cx="0" cy="0" rx="102" ry="25" fill="#04090d" opacity=".8"/>
+  <path d="M-90 -8V-405Q-90 -475 0 -486Q90 -475 90 -405V-8Z" fill="url(#metal)" stroke="#729b9a" stroke-opacity=".7" stroke-width="5"/>
+  <path d="M-75 -24V-400Q-75 -454 0 -464Q75 -454 75 -400V-24Z" fill="url(#glass)" stroke="#8dd9d0" stroke-opacity=".6" stroke-width="3"/>
+  <path d="M-61 -55V-392Q-61 -432 0 -440Q61 -432 61 -392V-55Z" fill="url(#podCore)"/>
+  <path d="M-72 -396Q0 -430 72 -396M-72 -52Q0 -25 72 -52" fill="none" stroke="#b1f1df" stroke-opacity=".35" stroke-width="3"/>
+  <path d="M-92 -390H-80M80 -390H92M-92 -74H-80M80 -74H92" stroke="#a6d7c9" stroke-width="8"/>
+  <rect x="-112" y="-8" width="224" height="28" rx="5" fill="#172a30" stroke="#6a9994" stroke-width="3"/>
+  <path d="M-76 20V54M76 20V54" stroke="#526f70" stroke-width="12"/>
+  <rect x="-34" y="-458" width="68" height="12" rx="5" fill="#a8eee0" opacity=".6"/>
+ </g>
+</defs>
+<rect width="1600" height="900" fill="#071116"/>
+<path d="M0 0H1600V600L800 735 0 600Z" fill="url(#wall)"/>
+<path d="M0 0L800 180 1600 0" fill="none" stroke="#4b777b" stroke-opacity=".35" stroke-width="5"/>
+<path d="M0 80L800 220 1600 80M0 180L800 270 1600 180M0 300L800 325 1600 300" fill="none" stroke="#6ba1a0" stroke-opacity=".13" stroke-width="3"/>
+<path d="M0 0L0 610 800 760 1600 610V0" fill="url(#grid)" opacity=".7"/>
+<path d="M0 590L800 735 1600 590V900H0Z" fill="url(#floor)"/>
+<path d="M0 590L800 735 1600 590M0 690L800 790 1600 690M0 790L800 850 1600 790" fill="none" stroke="#6d9d98" stroke-opacity=".17" stroke-width="3"/>
+<path d="M800 735L400 900M800 735L650 900M800 735L950 900M800 735L1200 900" stroke="#6d9d98" stroke-opacity=".14" stroke-width="3"/>
+<ellipse cx="800" cy="630" rx="500" ry="160" fill="url(#glow)" filter="url(#blur)"/>
+<g opacity=".42" transform="translate(280 600) scale(.72)"><use href="#pod"/></g>
+<g opacity=".35" transform="translate(1310 600) scale(.72)"><use href="#pod"/></g>
+<g transform="translate(790 650) scale(1.08)">
+ <ellipse cx="0" cy="-15" rx="175" ry="520" fill="url(#glow)" opacity=".55" filter="url(#blur)"/>
+ <use href="#pod"/>
+ <path d="M-89 -415Q-40 -465 5 -465" fill="none" stroke="#baf8ed" stroke-width="7" stroke-linecap="round"/>
+ <path d="M-88 -385L-88 -70" stroke="#c5fff1" stroke-opacity=".55" stroke-width="5"/>
+ <path d="M90 -385L90 -70" stroke="#62c4bd" stroke-opacity=".35" stroke-width="4"/>
+ <rect x="-68" y="-350" width="136" height="8" rx="4" fill="#8ce6d7" opacity=".55"/>
+ <circle cx="0" cy="-335" r="8" fill="#d0fff1"/>
+</g>
+<g transform="translate(145 0)"><path d="M0 0V250M0 250L-70 510M0 250L70 510" stroke="#517a7c" stroke-width="8" opacity=".4"/></g>
+<g transform="translate(1450 0)"><path d="M0 0V250M0 250L-70 510M0 250L70 510" stroke="#517a7c" stroke-width="8" opacity=".4"/></g>
+<g transform="translate(1240 530)">
+ <path d="M0 0H190V190H0Z" fill="#0b171c" stroke="#648c88" stroke-width="5"/>
+ <path d="M18 18H172V130H18Z" fill="#142c30" stroke="#477e79" stroke-width="3"/>
+ <path d="M28 36H155M28 54H132M28 72H165M28 90H112" stroke="#82cbb7" stroke-width="5" opacity=".6"/>
+ <path d="M25 150H165" stroke="#d08b55" stroke-width="5" opacity=".8"/>
+ <circle cx="160" cy="150" r="7" fill="#f4b36c"/>
+</g>
+<g opacity=".7" fill="#c6f9e8"><circle cx="360" cy="120" r="4"/><circle cx="1220" cy="180" r="3"/><circle cx="1030" cy="360" r="3"/><circle cx="560" cy="260" r="2"/></g>
+<path d="M0 0H1600V900H0Z" fill="none" stroke="#02070a" stroke-width="42" opacity=".55"/>
+<rect x="36" y="36" width="1528" height="828" fill="none" stroke="#84b8ad" stroke-opacity=".17" stroke-width="2"/>
+<g font-family="Arial,sans-serif" fill="#bce9db" opacity=".72" letter-spacing="5"><text x="70" y="92" font-size="20">SEKTOR A // MEDICÍNA</text><text x="70" y="126" font-size="13" opacity=".7">KRYOGENNÍ JEDNOTKA 07 — NAPÁJENÍ KRITICKÉ</text><text x="1280" y="92" font-size="17">2199 / 04:17</text></g>
+<g transform="translate(80 745)" font-family="Arial,sans-serif"><rect width="260" height="62" rx="4" fill="#081419" stroke="#54877d"/><circle cx="22" cy="22" r="6" fill="#efad62"/><text x="42" y="27" fill="#efc18c" font-size="14" letter-spacing="3">NOUZOVÝ REŽIM</text><text x="22" y="49" fill="#739a91" font-size="11" letter-spacing="2">ATMOSFÉRA // NESTABILNÍ</text></g>
+<rect width="1600" height="900" fill="#07151a" opacity=".1"/>
+</svg>

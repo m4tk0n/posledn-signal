@@ -71,9 +71,8 @@ function h(string $value): string
     <?php elseif ($game === null): ?>
         <section class="intro-layout">
             <div class="intro-scene">
-                <div class="scene-visual cryo-art" aria-hidden="true">
-                    <span class="pod pod-one"></span><span class="pod pod-two"></span><span class="pod pod-three"></span>
-                    <span class="scene-console"></span><span class="scene-beam"></span>
+                <div class="scene-visual cryo-art" data-scene="cryo" aria-label="Ilustrovaný pohled do kryokomory">
+                    <img class="scene-art" src="assets/images/scenes/cryo-chamber.svg" alt="Kryokomora s řadou vysokých kryogenních modulů a nouzovým osvětlením">
                 </div>
                 <div class="scene-caption"><span>OBJEKT // PODZEMNÍ KOMPLEX</span><span>ČAS // NEZNÁMÝ</span></div>
             </div>
@@ -151,11 +150,7 @@ function h(string $value): string
                         <span class="scene-coordinates">A-01 / <?= $game['room']['visual'] === 'cryo' ? '01' : '02' ?></span>
                     </div>
                     <div class="scene-visual <?= $game['room']['visual'] === 'cryo' ? 'cryo-art' : 'corridor-art' ?>" data-scene="<?= h($game['room']['visual']) ?>" aria-label="<?= h($game['room']['name']) ?>">
-                        <?php if ($game['room']['visual'] === 'cryo'): ?>
-                            <span class="pod pod-one"></span><span class="pod pod-two"></span><span class="pod pod-three"></span><span class="scene-console"></span><span class="scene-beam"></span>
-                        <?php else: ?>
-                            <span class="corridor-light"></span><span class="corridor-door"></span><span class="corridor-panel"></span><span class="corridor-cables"></span>
-                        <?php endif; ?>
+                        <img class="scene-art" src="assets/images/scenes/<?= $game['room']['visual'] === 'cryo' ? 'cryo-chamber' : 'maintenance-corridor' ?>.svg" alt="<?= h($game['room']['name']) ?> — ilustrované herní prostředí">
                     </div>
                     <div class="scene-footer"><span><i class="status-light"></i> PROSTŘEDÍ ZMAPOVÁNO ČÁSTEČNĚ</span><span><?= h($game['room']['sector']) ?></span></div>
                 </section>
