@@ -23,6 +23,17 @@ body{margin:0;background:radial-gradient(ellipse at 50% 0,#1b3032 0,#0b1218 52%,
 .location-block{padding:18px 0;border-bottom:1px solid #263b3b;display:grid;gap:7px}
 .location-block strong{font-size:1rem;color:#e1eee8}
 .location-block>span{font-size:.76rem;color:#819992}
+.map-panel{padding:18px 0;border-bottom:1px solid #263b3b}
+.map-track{position:relative;display:grid;gap:0;margin:12px 0 0 4px}
+.map-track:before{content:"";position:absolute;left:5px;top:9px;bottom:12px;width:1px;background:#49675d}
+.map-node{position:relative;display:flex;align-items:flex-start;gap:12px;padding:0 0 16px}
+.map-node:last-child{padding-bottom:0}
+.map-dot{position:relative;z-index:1;flex:0 0 11px;width:11px;height:11px;margin-top:3px;border:1px solid #638277;border-radius:50%;background:#12201f}
+.map-node.known .map-dot{background:#78b99b;box-shadow:0 0 9px #78b99b77}
+.map-node.current .map-dot{outline:3px solid #78b99b33}
+.map-node strong{display:block;color:#b9cbc4;font-size:.75rem;font-weight:650}
+.map-node small{display:block;margin-top:3px;color:#718b84;font-size:.63rem}
+.map-node.unknown strong{color:#647873}
 .inventory-panel{padding-top:18px}
 .inventory-panel ul{list-style:none;padding:0;margin:12px 0 0}
 .inventory-panel li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #1e3031;color:#b9cbc4;font-size:.8rem}
