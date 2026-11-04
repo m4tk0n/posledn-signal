@@ -102,6 +102,17 @@ PHP 5.3 používat nebudeme. Webzdarma uvádí podporu PHP 7.4 až 8.4 a MySQL 8
 
 Složky pro další moduly budou doplňovány postupně podle skutečné implementace; nebudeme vytvářet prázdné systémy jen kvůli struktuře.
 
+## Databáze a instalace
+
+- Databázi bude možné připravit samostatným webovým instalátorem `install/install.php`; ruční vytváření tabulek přes phpMyAdmin nebude běžným instalačním postupem.
+- Instalátor načte konfiguraci ze skutečného serverového `.env`, včetně povinného `DB_PREFIX`. Prefix nebude mít skrytou výchozí hodnotu.
+- Schéma bude uloženo v `install/schema.sql` a názvy tabulek budou v něm označené zástupným symbolem `{DB_PREFIX}`. Instalátor jej bezpečně nahradí hodnotou z konfigurace.
+- Všechny tabulky, indexy a vazby budou používat stejný prefix. Žádná část aplikace nesmí názvy tabulek natvrdo zapisovat bez prefixu.
+- Instalace ověří připojení a konfiguraci, bezpečně vytvoří potřebnou strukturu a nesmí při opakovaném spuštění nekontrolovaně duplikovat základní data.
+- Po úspěšné instalaci bude instalační rozhraní zablokováno nebo odstraněno.
+- Pozdější změny struktury databáze se budou provádět verzovanými migracemi, nikoli opětovným spuštěním destruktivní instalace.
+- Produkční `.env` zůstává pouze na serveru; nesmí se dostat do GitHubu ani být přepsán FTP nasazením.
+
 ## Zásady vývoje
 
 - Nejdříve navrhnout herní systémy a datový model, teprve potom implementovat jednotlivé části.
