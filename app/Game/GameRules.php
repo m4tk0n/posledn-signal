@@ -13,6 +13,25 @@ final class GameRules
             'room' => 'cryo_chamber',
             'message' => 'Prozkoumáš kryokomoru. Pod převráceným vozíkem najdeš kovovou schránku a z podlahy sebereš několik použitelných součástek.',
         ],
+        'search_emergency_kit' => [
+            'flag' => 'emergency_kit_searched',
+            'room' => 'cryo_chamber',
+            'message' => 'Za uvolněným panelem najdeš nouzový balíček. Obsahuje dvě lahve vody a dvě potravinové dávky.',
+        ],
+        'drink_water' => [
+            'flag' => 'water_consumed',
+            'room' => '*',
+            'item' => 'water_bottle',
+            'repeatable' => true,
+            'message' => 'Vypiješ část zásob vody. Žízeň poleví.',
+        ],
+        'eat_ration' => [
+            'flag' => 'ration_consumed',
+            'room' => '*',
+            'item' => 'food_ration',
+            'repeatable' => true,
+            'message' => 'Sníš jednu potravinovou dávku. Hlad poleví.',
+        ],
         'read_terminal' => [
             'flag' => 'terminal_read',
             'room' => 'cryo_chamber',
@@ -68,7 +87,7 @@ final class GameRules
     {
         $available = [];
         foreach (self::ACTIONS as $id => $definition) {
-            if (($state['room'] ?? '') !== $definition['room'] || !empty($state['flags'][$definition['flag']])) {
+            if (($definition['room'] !== '*' && ($state['room'] ?? '') !== $definition['room']) || (empty($definition['repeatable']) && !empty($state['flags'][$definition['flag']]))) {
                 continue;
             }
             $allowed = true;
@@ -94,10 +113,10 @@ final class GameRules
             throw new RuntimeException('Neznámá herní akce.');
         }
         $definition = self::ACTIONS[$action];
-        if (($state['room'] ?? '') !== $definition['room']) {
+        if ($definition['room'] !== '*' && ($state['room'] ?? '') !== $definition['room']) {
             throw new RuntimeException('Tuto akci v aktuální místnosti nelze provést.');
         }
-        if (!empty($state['flags'][$definition['flag']])) {
+        if (empty($definition['repeatable']) && !empty($state['flags'][$definition['flag']])) {
             throw new RuntimeException('Tuto část už jsi prozkoumal.');
         }
         foreach ($definition['requires'] ?? [] as $requiredFlag) {
@@ -109,14 +128,25 @@ final class GameRules
             throw new RuntimeException('V inventáři nemáš potřebný předmět.');
         }
 
-        $state['flags'][$definition['flag']] = true;
+        if (empty($definition['repeatable'])) {
+            $state['flags'][$definition['flag']] = true;
+        }
         $state['journal'][] = [
             'type' => $action,
             'text' => $definition['message'],
             'at' => gmdate('c'),
         ];
 
-        if ($action === 'inspect_room') {
+        if ($action === 'search_emergency_kit') {
+            self::addItem($state, 'water_bottle', 'Lahev vody', 2);
+            self::addItem($state, 'food_ration', 'Potravinová dávka', 2);
+        } elseif ($action === 'drink_water') {
+            self::removeItem($state, 'water_bottle', 1);
+            $state['player']['thirst'] = max(0, (int) ($state['player']['thirst'] ?? 0) - 35);
+        } elseif ($action === 'eat_ration') {
+            self::removeItem($state, 'food_ration', 1);
+            $state['player']['hunger'] = max(0, (int) ($state['player']['hunger'] ?? 0) - 30);
+        } elseif ($action === 'inspect_room') {
             self::addItem($state, 'scrap_metal', 'Kovové součástky', 2);
         } elseif ($action === 'open_door') {
             $state['room'] = 'maintenance_corridor';
@@ -133,6 +163,15 @@ final class GameRules
             $state['flags']['complex_map_unlocked'] = true;
         }
 
+        // Potreby se posouvaji pouze po uspesne akci, nikoli pri nacteni hry.
+        $state['player']['hunger'] = min(100, (int) ($state['player']['hunger'] ?? 0) + 3);
+        $state['player']['thirst'] = min(100, (int) ($state['player']['thirst'] ?? 0) + 4);
+        $state['player']['energy'] = max(0, (int) ($state['player']['energy'] ?? 0) - 2);
+        if ($state['player']['thirst'] >= 80) {
+            $state['player']['health'] = max(0, (int) ($state['player']['health'] ?? 100) - 8);
+        } elseif ($state['player']['hunger'] >= 80) {
+            $state['player']['health'] = max(0, (int) ($state['player']['health'] ?? 100) - 5);
+        }
         return ['state' => $state, 'message' => $definition['message']];
     }
 
@@ -140,6 +179,9 @@ final class GameRules
     {
         return [
             'inspect_room' => 'Prozkoumat kryokomoru',
+            'search_emergency_kit' => 'Najít nouzový balíček',
+            'drink_water' => 'Napít se vody',
+            'eat_ration' => 'Najíst se',
             'read_terminal' => 'Přečíst nouzový terminál',
             'listen_radio' => 'Poslouchat rádiové vysílání',
             'open_door' => 'Otevřít dveře do chodby',
