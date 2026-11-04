@@ -90,6 +90,20 @@ function h(string $value): string
             </section>
         </section>
     <?php else: ?>
+        <?php
+        $sceneTargets = [
+            'inspect_room' => ['x' => 19, 'y' => 67, 'label' => 'Prozkoumat okolí'],
+            'search_emergency_kit' => ['x' => 51, 'y' => 70, 'label' => 'Nouzový balíček'],
+            'read_terminal' => ['x' => 77, 'y' => 62, 'label' => 'Terminál'],
+            'listen_radio' => ['x' => 35, 'y' => 34, 'label' => 'Rádio'],
+            'open_door' => ['x' => 88, 'y' => 47, 'label' => 'Dveře'],
+            'drink_water' => ['x' => 47, 'y' => 82, 'label' => 'Napít se'],
+            'eat_ration' => ['x' => 56, 'y' => 82, 'label' => 'Najíst se'],
+            'inspect_power_panel' => ['x' => 82, 'y' => 63, 'label' => 'Rozvaděč'],
+            'install_fuse' => ['x' => 82, 'y' => 63, 'label' => 'Instalovat pojistku'],
+            'inspect_generator' => ['x' => 55, 'y' => 43, 'label' => 'Generátor'],
+        ];
+        ?>
         <div class="game-topline">
             <span>KAPITOLA <?= (int) $game['chapter'] ?> // <?= h($game['room']['sector']) ?></span>
             <span>ULOŽENÁ HRA // AUTOMATICKY</span>
@@ -151,6 +165,15 @@ function h(string $value): string
                     </div>
                     <div class="scene-visual <?= $game['room']['visual'] === 'cryo' ? 'cryo-art' : 'corridor-art' ?>" data-scene="<?= h($game['room']['visual']) ?>" aria-label="<?= h($game['room']['name']) ?>">
                         <img class="scene-art" src="assets/images/scenes/<?= $game['room']['visual'] === 'cryo' ? 'cryo-chamber' : 'maintenance-corridor' ?>.svg" alt="<?= h($game['room']['name']) ?> — ilustrované herní prostředí">
+                        <div class="scene-character" id="scene-character" aria-label="Tvoje postava">
+                            <img src="assets/images/characters/survivor.svg" alt="">
+                        </div>
+                        <?php foreach ($game['actions'] as $action): ?>
+                            <?php $target = $sceneTargets[$action['id']] ?? ['x' => 50, 'y' => 55, 'label' => $action['label']]; ?>
+                            <button type="button" class="scene-hotspot" data-command="<?= h($action['id']) ?>" data-target-x="<?= (int) $target['x'] ?>" data-target-y="<?= (int) $target['y'] ?>" style="--hotspot-x:<?= (int) $target['x'] ?>%;--hotspot-y:<?= (int) $target['y'] ?>%" aria-label="<?= h($target['label']) ?>">
+                                <span class="hotspot-ring"></span><span class="hotspot-label"><?= h($target['label']) ?></span>
+                            </button>
+                        <?php endforeach; ?>
                     </div>
                     <div class="scene-footer"><span><i class="status-light"></i> PROSTŘEDÍ ZMAPOVÁNO ČÁSTEČNĚ</span><span><?= h($game['room']['sector']) ?></span></div>
                 </section>
