@@ -49,10 +49,7 @@
             button.disabled = true;
             try {
                 const result = await send({action: 'interact', command, _csrf: csrf});
-                message.textContent = result.message;
-                const item = document.createElement('li');
-                item.textContent = result.message;
-                journal.appendChild(item);
+                window.location.reload();
             } catch (error) {
                 alert(error.message);
                 button.disabled = false;
