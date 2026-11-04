@@ -38,17 +38,69 @@ Každá činnost má mít smysluplný výsledek. Hra nemá stát na bezúčelné
 - Rozhodnutí, která mění vztahy, dostupné možnosti a pozdější události.
 - Nové oblasti odemykané průzkumem a příběhovým postupem.
 
-## Technologický základ
+## Technologická architektura
 
-Zamýšlené prostředí:
+- **PHP 8.4** – serverová logika; cílová verze odpovídá aktuální nabídce Webzdarma.
+- **MySQL 8.0 + PDO** – databáze, výhradně připravené dotazy.
+- **HTML5, CSS a JavaScript** – herní rozhraní bez zbytečných frameworků.
+- **Python** – vývojové nástroje, generování obsahu a automatizované testy.
+- **GitHub Actions** – kontrola a automatické nasazení na Webzdarma.
 
-- PHP – serverová logika a práce s databází.
-- MySQL 8.0 – ukládání herního světa, postupu, inventáře, úkolů a událostí.
-- HTML, CSS a JavaScript – webové herní rozhraní.
-- Python – vývojové nástroje, generování dat a automatizované testy.
-- GitHub – verzování, revize změn a automatizované kontroly.
+PHP 5.3 používat nebudeme. Webzdarma uvádí podporu PHP 7.4 až 8.4 a MySQL 8; pro nový projekt volíme PHP 8.4. Viz [nabídka Webzdarma](https://www.webzdarma.cz/vlastni-kod/) a [oznámení PHP 8.4](https://www.webzdarma.cz/novinky/detail/php-8-4-nyni-dostupne-na-webzdarma-cz-210).
 
-**Kompatibilita:** PHP 5.3 je velmi stará verze. Pokud bude povinná, musí se návrh držet její syntaxe a ověřit kompatibilitu s konkrétním MySQL 8.0 serverem a dostupným databázovým ovladačem. Pokud hosting dovolí PHP 8.x, je vhodnější použít podporovanou verzi.
+## Bezpečnost a konfigurace
+
+- Databázové údaje a aplikační tajemství patří do souboru `.env`, nikdy přímo do zdrojového kódu.
+- Do GitHubu se ukládá pouze `.env.example` bez skutečných hesel. Skutečný `.env` je ignorován Gitem a vyloučen z FTP nasazení, takže se při deployi nepřepisuje.
+- Přístup k databázi probíhá přes PDO, vypnuté emulované prepare statements a parametrizované dotazy.
+- Chyby databáze se zapisují do serverového logu; uživateli se neukazují přihlašovací údaje ani interní výjimky.
+- Relace používají HttpOnly, SameSite a při HTTPS Secure cookies; formuláře budou chráněny CSRF tokenem.
+- Soukromé adresáře a skryté konfigurační soubory jsou blokovány přes `.htaccess`.
+- Hesla hráčů budou ukládána výhradně pomocí `password_hash()` a ověřována přes `password_verify()`.
+- Herní akce a změny stavu ověřuje server; klientské JavaScriptové údaje nejsou autoritativní.
+
+### Nastavení serveru
+
+1. Na serveru vytvořit soubor `.env` podle `.env.example`.
+2. Doplnit skutečné údaje databáze a unikátní hodnotu `APP_KEY`.
+3. Soubor `.env` ponechat na serveru; automatické nasazení jej záměrně vynechává.
+4. Zkontrolovat, že hosting používá PHP 8.4 a má zapnuté rozšíření PDO MySQL.
+
+**Nikdy neposílat obsah produkčního `.env` do chatu ani do GitHubu.**
+
+## Adresářová struktura
+
+```
+/
+├── .github/workflows/deploy.yml
+├── .env.example
+├── .gitignore
+├── .htaccess
+├── index.php
+├── app/
+│   ├── bootstrap.php
+│   ├── Core/
+│   │   ├── Env.php
+│   │   └── Database.php
+│   ├── Security/
+│   │   └── Session.php
+│   ├── Game/
+│   ├── Auth/
+│   └── Services/
+├── assets/
+│   ├── css/main.css
+│   ├── js/
+│   └── images/
+├── database/
+│   └── migrations/
+├── storage/
+│   ├── logs/
+│   └── saves/
+├── tests/
+└── tools/
+```
+
+Složky pro další moduly budou doplňovány postupně podle skutečné implementace; nebudeme vytvářet prázdné systémy jen kvůli struktuře.
 
 ## Zásady vývoje
 
@@ -57,16 +109,17 @@ Zamýšlené prostředí:
 - Důležité herní akce a změny stavu ověřovat na serveru.
 - Ukládání postupu musí být bezpečné a konzistentní.
 - Každá větší změna musí mít odpovídající testy.
-- Neprovádět nevyžádané změny již existujících souborů.
+- Zachovávat přehlednou strukturu, komentáře a diagnostiku.
+- Po každé etapě připravit testovací verzi; uživatel ověřuje chování hry, vývoj a opravy zajišťuje implementace.
 
 ## První vývojová etapa
 
-1. Upřesnit pravidla hry a podobu herního dne.
-2. Navrhnout datový model a ukládání herního postupu.
-3. Připravit základní webové rozhraní a založení nové hry.
-4. Implementovat první hratelný úsek: probuzení v komplexu, první opravu a zachycení rádiového signálu.
-5. Ověřit ukládání a načítání hry.
+1. Základ projektu, konfigurace a bezpečnostní vrstva.
+2. Datový model hráče, herního světa a ukládání postupu.
+3. Založení nové hry a načítání uložené hry.
+4. První hratelný úsek: probuzení v komplexu, první oprava a zachycení rádiového signálu.
+5. Automatizované testy a uživatelské testování na Webzdarma.
 
 ---
 
-**Stav projektu:** návrh konceptu. Hratelná verze zatím není implementována.
+**Stav projektu:** základní aplikační kostra založena; herní systémy a první hratelný úsek jsou další etapou.
