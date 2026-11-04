@@ -53,4 +53,15 @@ if (!is_string($script) || !str_contains($script, 'scene-character') || !str_con
     throw new RuntimeException('Scene movement or interaction styling is missing.');
 }
 
+$rules = file_get_contents($root . '/app/Game/GameRules.php');
+$service = file_get_contents($root . '/app/Game/GameService.php');
+$api = file_get_contents($root . '/api/game.php');
+$view = file_get_contents($root . '/index.php');
+if (!is_string($rules) || !str_contains($rules, 'validatePosition') || !str_contains($rules, 'validateInteractionPosition')
+    || !is_string($service) || !str_contains($service, 'savePosition') || !str_contains($service, 'validateInteractionPosition')
+    || !is_string($api) || !str_contains($api, 'save_position')
+    || !is_string($view) || !str_contains($view, 'data-player-x') || !str_contains($view, 'player_position')) {
+    throw new RuntimeException('Server-side player position persistence or interaction validation is missing.');
+}
+
 echo "Scene checks passed (illustrations, survivor sprite, clickable hotspots and movement).\\n";
