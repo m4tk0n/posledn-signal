@@ -171,6 +171,12 @@ function h(string $value): string
                             <span>STAV // KONEC HRY</span>
                             <h3>Životní funkce zastaveny</h3>
                             <p>Postava zemřela. Tento průchod skončil. Uložený záznam zůstává zachován.</p>
+                            <form id="start-game-form" class="start-form">
+                                <input type="hidden" name="_csrf" value="<?= h($csrf) ?>">
+                                <label for="player-name">Jméno nové postavy</label>
+                                <input id="player-name" name="name" maxlength="40" value="Přeživší" required>
+                                <button class="game-button" type="submit">Začít nový průchod</button>
+                            </form>
                         </div>
                     <?php endif; ?>
                     <div class="action-section">
