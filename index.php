@@ -201,7 +201,8 @@ function h(string $value): string
                         <p class="system-label"><?= (int) ($game['state']['player']['health'] ?? 100) <= 0 ? 'KONEC HRY' : 'DOSTUPNÉ AKCE' ?></p>
                         <div class="action-list">
                             <?php foreach ($game['actions'] as $action): ?>
-                                <button class="game-button action-button" data-command="<?= h($action['id']) ?>"><?= h($action['label']) ?><span>→</span></button>
+                                <?php $target = $sceneTargets[$action['id']] ?? ['x' => 50, 'y' => 55]; ?>
+                                <button class="game-button action-button" data-command="<?= h($action['id']) ?>" data-target-x="<?= (int) $target['x'] ?>" data-target-y="<?= (int) $target['y'] ?>"><?= h($action['label']) ?><span>→</span></button>
                             <?php endforeach; ?>
                             <?php if (empty($game['actions'])): ?>
                                 <p class="empty-state">V této místnosti už nejsou dostupné žádné nové akce.</p>
