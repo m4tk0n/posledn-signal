@@ -68,7 +68,9 @@ try {
             throw new RuntimeException('V databázovém schématu zůstal nevyřešený prefix.');
         }
 
-        // DDL statements are not transaction-safe in MySQL; record completion last.
+        // Remove full-line SQL comments before splitting statements.
+        $schema = preg_replace('/^\\s*--.*(?:\\R|$)/m', '', $schema) ?? $schema;
+        // MySQL DDL implicitly commits; write the migration record only after all DDL succeeds.
         $statements = preg_split('/;\s*(?:\r?\n|$)/', trim($schema));
         foreach ($statements ?: [] as $statement) {
             $statement = trim($statement);
