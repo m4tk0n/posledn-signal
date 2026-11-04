@@ -177,7 +177,7 @@ function h(string $value): string
                     </div>
 
                     <div class="movement-panel" aria-label="Ovládání pohybu postavy">
-                        <div class="movement-help"><strong>POHYB POSTAVY</strong><span>W A S D / šipky nebo směrová tlačítka</span></div>
+                        <div class="movement-help"><strong>POHYB POSTAVY</strong><span>W A S D / šipky, tlačítka nebo klepnutí na podlahu</span></div>
                         <div class="movement-controls">
                             <button type="button" class="move-button move-up" data-move="0,-1" aria-label="Jít nahoru">▲</button>
                             <button type="button" class="move-button move-left" data-move="-1,0" aria-label="Jít doleva">◀</button>
