@@ -26,7 +26,7 @@ function expectFailure(callable $callback, string $message): void
 
 $state = GameRules::initialState();
 expect($state['room'] === 'cryo_chamber', 'New game must start in the cryo chamber.');
-expect(count(GameRules::availableActions($state)) === 3, 'Cryo chamber must initially offer three actions.');
+expect(count(GameRules::availableActions($state)) === 4, 'Cryo chamber must initially offer four actions.');
 expect(StoryCatalog::room('cryo_chamber')['name'] === 'Kryokomora', 'Cryo room metadata is missing.');
 $initialMap = StoryCatalog::map($state);
 expect(count($initialMap) === 4, 'The initial complex map must contain four locations.');
@@ -35,6 +35,33 @@ expect($initialMap[1]['known'] === false && $initialMap[1]['status'] === 'uzamč
 expectFailure(
     static fn() => GameRules::apply($state, 'open_door'),
     'Door must not open before the chamber is inspected and terminal read.'
+);
+
+$survival = GameRules::initialState();
+$survivalResult = GameRules::apply($survival, 'search_emergency_kit');
+$survival = $survivalResult['state'];
+expect(($survival['player']['hunger'] ?? -1) === 13, 'A successful action must increase hunger by three.');
+expect(($survival['player']['thirst'] ?? -1) === 14, 'A successful action must increase thirst by four.');
+expect(($survival['player']['energy'] ?? -1) === 68, 'A successful action must reduce energy by two.');
+expect(count($survival['inventory']) === 2, 'The emergency kit must contain water and food.');
+$survival = GameRules::apply($survival, 'drink_water')['state'];
+expect(($survival['player']['thirst'] ?? -1) === 0, 'Drinking must reduce thirst and clamp it at zero.');
+expect(($survival['inventory'][0]['quantity'] ?? 0) === 1, 'Drinking must consume exactly one bottle.');
+$survival = GameRules::apply($survival, 'eat_ration')['state'];
+expect(($survival['player']['hunger'] ?? -1) === 0, 'Eating must reduce hunger and clamp it at zero.');
+expectFailure(
+    static fn() => GameRules::apply($survival, 'eat_ration'),
+    'Eating without a remaining ration must be rejected.'
+);
+$critical = GameRules::initialState();
+$critical['player']['thirst'] = 77;
+$critical['player']['health'] = 100;
+$critical = GameRules::apply($critical, 'search_emergency_kit')['state'];
+expect(($critical['player']['health'] ?? 0) === 92, 'Critical thirst must cause health damage after a successful action.');
+$unchanged = GameRules::initialState();
+expectFailure(
+    static fn() => GameRules::apply($unchanged, 'drink_water'),
+    'An unavailable survival action must fail.'
 );
 
 $state = GameRules::apply($state, 'inspect_room')['state'];
@@ -72,4 +99,4 @@ expectFailure(
     'An already installed fuse must not be installable twice.'
 );
 
-echo "Game rules checks passed (new game, prerequisites, inventory, room transition, power restoration, map unlock, duplicate prevention).\n";
+echo "Game rules checks passed (new game, prerequisites, inventory, room transition, power restoration, map unlock, duplicate prevention, hunger, thirst, energy, food and water consumption).\n";
