@@ -22,7 +22,7 @@ try {
         '# test configuration',
         'APP_TIMEZONE=Europe/Prague',
         'DB_PREFIX="test_prefix_"',
-        'APP_KEY='test-key-with-quotes'',
+        "APP_KEY='test-key-with-quotes'",
         'INVALID KEY=ignored',
         'NO_SEPARATOR',
         '',
