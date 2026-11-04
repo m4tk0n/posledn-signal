@@ -58,6 +58,13 @@ $critical['player']['thirst'] = 77;
 $critical['player']['health'] = 100;
 $critical = GameRules::apply($critical, 'search_emergency_kit')['state'];
 expect(($critical['player']['health'] ?? 0) === 92, 'Critical thirst must cause health damage after a successful action.');
+$dead = GameRules::initialState();
+$dead['player']['health'] = 0;
+expect(count(GameRules::availableActions($dead)) === 0, 'A dead character must not have available actions.');
+expectFailure(
+    static fn() => GameRules::apply($dead, 'search_emergency_kit'),
+    'A dead character must not be able to continue playing.'
+);
 $unchanged = GameRules::initialState();
 expectFailure(
     static fn() => GameRules::apply($unchanged, 'drink_water'),
