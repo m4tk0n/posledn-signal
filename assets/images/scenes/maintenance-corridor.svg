@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Servisní chodba výzkumného komplexu</title><desc id="desc">Dlouhá temná průmyslová chodba s kabelovými rozvody, nouzovými světly, dveřmi a rozvaděčem.</desc>
+<defs>
+ <linearGradient id="back" x2="0" y2="1"><stop stop-color="#22363a"/><stop offset="1" stop-color="#0b1519"/></linearGradient>
+ <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#243b3d"/><stop offset="1" stop-color="#060b0e"/></linearGradient>
+ <linearGradient id="wall" x2="1" y2="0"><stop stop-color="#091419"/><stop offset=".5" stop-color="#263d40"/><stop offset="1" stop-color="#091419"/></linearGradient>
+ <linearGradient id="door" x2="1" y2="0"><stop stop-color="#101e23"/><stop offset=".5" stop-color="#3a5554"/><stop offset="1" stop-color="#101a20"/></linearGradient>
+ <radialGradient id="lamp"><stop stop-color="#a5f1d7" stop-opacity=".65"/><stop offset="1" stop-color="#73c8b4" stop-opacity="0"/></radialGradient>
+ <filter id="blur"><feGaussianBlur stdDeviation="26"/></filter>
+ <pattern id="grate" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M0 0H28V28" fill="none" stroke="#8bc2b3" stroke-opacity=".1"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="#071116"/>
+<path d="M0 0H1600V570L800 680 0 570Z" fill="url(#back)"/>
+<path d="M0 0L570 260H1030L1600 0" fill="#172b30" stroke="#5e8580" stroke-opacity=".4" stroke-width="5"/>
+<path d="M0 0L570 260V620L0 570ZM1600 0L1030 260V620L1600 570Z" fill="url(#wall)" stroke="#5b817d" stroke-opacity=".32" stroke-width="5"/>
+<path d="M570 260H1030V620H570Z" fill="#0b171b" stroke="#668b84" stroke-opacity=".5" stroke-width="5"/>
+<path d="M610 290H990V590H610Z" fill="url(#door)" stroke="#89a9a0" stroke-opacity=".4" stroke-width="5"/>
+<path d="M635 310H965V570H635Z" fill="none" stroke="#6e9990" stroke-opacity=".35" stroke-width="3"/>
+<path d="M800 310V570" stroke="#6e9990" stroke-opacity=".3" stroke-width="3"/>
+<path d="M0 570L800 680 1600 570V900H0Z" fill="url(#floor)"/>
+<path d="M0 570L800 680 1600 570M0 690L800 770 1600 690M0 810L800 850 1600 810" fill="none" stroke="#83aaa0" stroke-opacity=".2" stroke-width="3"/>
+<path d="M800 680L380 900M800 680L600 900M800 680L1000 900M800 680L1220 900" stroke="#70938b" stroke-opacity=".16" stroke-width="3"/>
+<path d="M0 95L570 300M0 205L570 360M0 320L570 420M1600 95L1030 300M1600 205L1030 360M1600 320L1030 420" stroke="#719b92" stroke-opacity=".17" stroke-width="6"/>
+<path d="M0 130L570 330M1600 130L1030 330" stroke="#101b20" stroke-width="20"/>
+<path d="M80 0V520M1520 0V520" stroke="#5d7e79" stroke-width="12" opacity=".3"/>
+<path d="M0 475L570 540M1600 475L1030 540" stroke="#a2c4b5" stroke-opacity=".25" stroke-width="8"/>
+<ellipse cx="800" cy="295" rx="390" ry="190" fill="url(#lamp)" filter="url(#blur)"/>
+<path d="M730 0H870L850 255H750Z" fill="#0a171c" stroke="#587a77" stroke-width="5"/>
+<rect x="758" y="210" width="84" height="12" rx="5" fill="#a9f2d8"/><rect x="758" y="210" width="84" height="12" rx="5" fill="#9cf5d5" filter="url(#blur)"/>
+<g transform="translate(1130 380)">
+ <rect width="210" height="300" rx="5" fill="#101e23" stroke="#6c928a" stroke-width="6"/>
+ <rect x="18" y="18" width="174" height="112" fill="#0b1519" stroke="#527d75" stroke-width="3"/>
+ <path d="M35 42H175M35 62H150M35 82H165M35 102H125" stroke="#7bd4b6" stroke-width="5" opacity=".65"/>
+ <rect x="25" y="155" width="160" height="105" fill="#182c30" stroke="#426a65" stroke-width="3"/>
+ <circle cx="52" cy="182" r="8" fill="#f2ad65"/><circle cx="84" cy="182" r="8" fill="#77caa7"/><circle cx="116" cy="182" r="8" fill="#77caa7"/>
+ <path d="M40 220H170M40 238H145" stroke="#547f76" stroke-width="5"/>
+ <text x="26" y="286" fill="#8ebbb0" font-family="Arial,sans-serif" font-size="12" letter-spacing="3">PWR / 04</text>
+</g>
+<g fill="none" stroke="#6e9188" stroke-width="12" opacity=".6"><path d="M100 0V200Q100 245 150 260L500 365"/><path d="M190 0V145Q190 190 230 205L520 315"/><path d="M1500 0V180Q1500 220 1450 245L1080 350"/><path d="M1410 0V120Q1410 165 1370 185L1080 275"/></g>
+<g stroke="#c4e6d5" stroke-width="5" opacity=".55"><path d="M110 500V560M130 503V563M150 506V566M1450 500V560M1470 497V557M1490 494V554"/></g>
+<path d="M0 0H1600V900H0Z" fill="url(#grate)" opacity=".28"/>
+<rect x="36" y="36" width="1528" height="828" fill="none" stroke="#84b8ad" stroke-opacity=".17" stroke-width="2"/>
+<g font-family="Arial,sans-serif" fill="#bce9db" opacity=".72" letter-spacing="5"><text x="70" y="92" font-size="20">SEKTOR A // TECHNICKÉ ZÁZEMÍ</text><text x="70" y="126" font-size="13">SERVISNÍ TRAKT 04 — ELEKTRICKÁ SÍŤ V PORUŠE</text><text x="1280" y="92" font-size="17">POWER / 04</text></g>
+<g transform="translate(80 745)" font-family="Arial,sans-serif"><rect width="280" height="62" rx="4" fill="#081419" stroke="#54877d"/><circle cx="22" cy="22" r="6" fill="#efad62"/><text x="42" y="27" fill="#efc18c" font-size="14" letter-spacing="3">NAPÁJENÍ 12 %</text><text x="22" y="49" fill="#739a91" font-size="11" letter-spacing="2">GENERÁTOR // RUČNÍ ZÁSAH NUTNÝ</text></g>
+<rect width="1600" height="900" fill="#07151a" opacity=".08"/>
+</svg>
