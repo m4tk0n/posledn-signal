@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
 
+# Prevent overlapping FTP deployments from racing each other.
+concurrency:
+  group: posledni-signal-production-deploy
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
