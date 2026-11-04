@@ -29,6 +29,9 @@ jobs:
       - name: Game rules checks
         run: php tests/game_rules_test.php
 
+      - name: Environment configuration checks
+        run: php tests/env_test.php
+
       - name: FTP deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
